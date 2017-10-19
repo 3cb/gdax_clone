@@ -4,7 +4,7 @@
             <div class="column is-narrow">
                 <tradebar></tradebar>
             </div>
-            <div class="column is-narrow">
+            <div class="column is-3">
                 <order-book></order-book>
             </div>
             <div class="column">
