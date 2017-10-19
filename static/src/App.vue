@@ -1,10 +1,15 @@
 <template>
-  <div><h1>GDAX</h1></div>
+  <dashboard></dashboard>
 </template>
 
 <script>
+import Dashboard from './components/Dashboard.vue'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    Dashboard
+  }
 }
 </script>
 
@@ -34,5 +39,9 @@ li {
 
 a {
   color: #42b983;
+}
+
+.info {
+  height: 50px;
 }
 </style>
