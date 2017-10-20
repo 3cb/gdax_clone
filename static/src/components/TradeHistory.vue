@@ -1,7 +1,6 @@
 <template>
     <div>
         <nav class="level info is-marginless is-paddingless">
-            <div class="level-right">
                 <div class="level-item">
                     <span>Notifications</span>
                 </div>
@@ -9,9 +8,8 @@
                     <span>Marc Courtney-Brooks</span>
                 </div>
                 <div class="level-item">
-                    <span>MENU</span>
+                    <span><a><i class="fa fa-bars" aria-hidden="true"></i></a></span>
                 </div>
-            </div>
         </nav>
         <nav class="level info is-marginless is-paddingless">
             <span class="is-uppercase has-text-weight-semibold">Trade History</span>
@@ -21,9 +19,12 @@
             <span class="level-item">Price({{ tickerDenom }})</span>
             <span class="level-item">Time</span>
         </nav>
-        <nav v-for="sale in sales" :key="sale.sequence" class="level">
+        <nav v-for="(sale, index) in sales" :key="sale.sequence" class="level">
             <span class="level-item">{{ parseFloat(sale.size).toFixed(8) }}</span>
-            <span class="level-item"> {{ parseFloat(sale.price).toFixed(2) }}</span>
+            <span class="level-item"> {{ parseFloat(sale.price).toFixed(2) }}<span class="icon"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
+            <span class="icon"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
+            </span>
             <span class="level-item"> {{ sale.time | formatDate }}</span>
         </nav>
     </div>
@@ -36,6 +37,9 @@ export default {
   filters: {
       formatDate(value) {
           return new Date(value).toLocaleTimeString()
+      },
+      formatArrow() {
+          
       }
   },
   computed: {
