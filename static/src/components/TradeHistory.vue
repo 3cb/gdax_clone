@@ -35,7 +35,6 @@ import _ from 'lodash'
 export default {
   filters: {
       formatDate(value) {
-          console.log("date string: ", new Date(value).toLocaleTimeString())
           return new Date(value).toLocaleTimeString()
       }
   },
