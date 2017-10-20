@@ -10,7 +10,7 @@
             <div class="column">
                 <chart></chart>
             </div>
-            <div class="column is-2">
+            <div class="column is-3">
                 <trade-history></trade-history>
             </div>
         </div>
@@ -29,28 +29,32 @@ export default {
     data() {
         var store = this.$store
         return {
-            ws: '',
-            mainListener: {
-                next(value) {
-                    // console.log(value)
-                },
-                error(err) {
-                    console.log("Error from websocket: ", err)
-                },
-                complete() {
-                    console.log("Stream Complete")
-                }
-            },
+            ws: null,
             tickerListener: {
                 next(value) {
                     console.log(value)
                     store.commit('tickerUpdate', value)
                 },
                 error(err) {
-                    console.log("Error from websocket:", err)
+                    console.log("Error from websocket - tickerListener:", err)
                 },
                 complete() {
                     console.log("Ticker channel stream complete.")
+                }
+            },
+            historyListener: {
+                next(value) {
+                    if (value.sequence > store.state.history.sequence) {
+                        store.commit('addSaleSequential', value)
+                    } else {
+                        store.commit('addSaleNonsequential', value)
+                    }
+                },
+                error(err) {
+                    console.log('Error from websocket - historyListener: ', err)
+                },
+                complete() {
+                    console.log('History channel complete.')
                 }
             }
         }
@@ -98,11 +102,16 @@ export default {
         ticker$() {
             return xs.from(this.main$)
                 .filter(v => v.type === "ticker" && v.sequence > this.$store.state.ticker.sequence && v.product_id === this.$store.state.selectedProduct.productId)
+        },
+        history$() {
+            return xs.from(this.main$)
+                .drop(1)
+                .filter(v => v.type === "ticker" && v.product_id === this.$store.state.selectedProduct.productId)
         }
     },
     beforeMount() {
-        this.main$.addListener(this.mainListener)
         this.ticker$.addListener(this.tickerListener)
+        this.history$.addListener(this.historyListener)
     },
     components: {
         Tradebar,

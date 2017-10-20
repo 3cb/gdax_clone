@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { addCommas } from '../lib/numbers.js'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -24,6 +25,12 @@ export default new Vuex.Store({
         ticker: {
             sequence: null,
             deltaClass: null
+        },
+        history: {
+            sales: [],
+            lastSize: '',
+            lastPrice: '',
+            sequence: null
         }
     },
     mutations: {
@@ -35,7 +42,10 @@ export default new Vuex.Store({
         },
         tickerUpdate(state, ticker) {
             // set ticker sequence number
-            state.ticker.sequence = ticker.sequence
+            if (ticker.sequence > state.ticker.sequence) {
+                state.ticker.sequence = ticker.sequence
+            }
+
             // update price, volume, and % delta
             state.selectedProduct.last = addCommas((parseFloat(ticker.price)).toFixed(2))
             state.selectedProduct.priceDelta24h = ((parseFloat(ticker.price) - (parseFloat(ticker.open_24h))) / parseFloat(ticker.open_24h) * 100).toFixed(2)
@@ -49,6 +59,31 @@ export default new Vuex.Store({
             } else {
                 state.ticker.deltaClass = "has-text-weight-semibold"
             }
+        },
+        addSaleSequential(state, sale) {
+            var x = {
+                size: sale.last_size,
+                price: sale.price,
+                time: sale.time,
+                sequence: sale.sequence
+            }
+            state.history.sales.unshift(x)
+            state.history.sales.lastSize = sale.last_size
+            state.history.sales.lastPrice = sale.price
+            state.history.sales.sequence = sale.sequence
+        },
+        addSaleNonsequential(state, sale) {
+            var x = {
+                size: sale.last_size,
+                price: sale.price,
+                time: sale.time,
+                sequence: sale.sequence
+            }
+            state.history.sales = _.chain(state.history.sales)
+                                        .concat(x)
+                                        .orderBy((o) => { o.sequence }, ['desc'])
+                                        .value()
+
         }
     }
 })
