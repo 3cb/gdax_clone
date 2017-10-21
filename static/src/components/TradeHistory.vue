@@ -1,12 +1,6 @@
 <template>
     <div id="container">
         <nav class="level info is-marginless is-paddingless">
-                <!-- <div class="level-item">
-                    <span>Notifications</span>
-                </div> -->
-                <!-- <div class="level-item">
-                    <span></span>
-                </div> -->
                 <div class="level-left"></div>
                 <div class="level-right">
                     <span><a><i class="fa fa-bars" aria-hidden="true"></i></a></span>
@@ -26,8 +20,7 @@ import _ from "lodash";
 export default {
   data() {
     return {
-      spacer: ""
-    };
+    }
   },
   computed: {
     tickerDenom() {

@@ -27,7 +27,7 @@ export default new Vuex.Store({
             deltaClass: null
         },
         history: {
-            sales: [], // { size, price, sequence, change }
+            sales: [], // { size, price, sequence, change, class }
             lastSize: '',
             lastPrice: '',
             sequence: null
@@ -66,7 +66,8 @@ export default new Vuex.Store({
                 price: sale.price,
                 time: sale.time,
                 sequence: sale.sequence,
-                change: ''
+                change: '',
+                class: ''
             }
             state.history.sales.unshift(x)
             state.history.sales.lastSize = sale.last_size
@@ -75,15 +76,19 @@ export default new Vuex.Store({
 
             // set price delta sign
             var length = state.history.sales.length
-            state.history.sales[length - 1].change = '=' // set last value to no change
+            state.history.sales[length-1].change = '=' // set last value to no change
+            state.history.sales[length-1].class = 'sales-span has-text-centered'
 
             for (var i = length-2; i >= 0; i--) {
                 if (state.history.sales[i].price > state.history.sales[i+1].price) {
                     state.history.sales[i].change = '+'
+                    state.history.sales[i].class = 'sales-span has-text-centered has-text-success'
                 } else if (state.history.sales[i].price < state.history.sales[i + 1].price) {
                     state.history.sales[i].change = '-'
+                    state.history.sales[i].class = 'sales-span has-text-centered has-text-danger'
                 } else {
                     state.history.sales[i].change = '='
+                    state.history.sales[i].class = state.history.sales[i+1].class
                 }
             }
         },
@@ -93,12 +98,31 @@ export default new Vuex.Store({
                 price: sale.price,
                 time: sale.time,
                 sequence: sale.sequence,
-                change: ''
+                change: '',
+                class: ''
             }
             state.history.sales = _.chain(state.history.sales)
                                         .concat(x)
                                         .orderBy((o) => { o.sequence }, ['desc'])
                                         .value()
+            
+            // set price delta sign
+            var length = state.history.sales.length
+            state.history.sales[length - 1].change = '=' // set last value to no change
+            state.history.sales[length - 1].class = 'sales-span has-text-centered'
+
+            for (var i = length - 2; i >= 0; i--) {
+                if (state.history.sales[i].price > state.history.sales[i + 1].price) {
+                    state.history.sales[i].change = '+'
+                    state.history.sales[i].class = 'sales-span has-text-centered has-text-success'
+                } else if (state.history.sales[i].price < state.history.sales[i + 1].price) {
+                    state.history.sales[i].change = '-'
+                    state.history.sales[i].class = 'sales-span has-text-centered has-text-danger'
+                } else {
+                    state.history.sales[i].change = '='
+                    state.history.sales[i].class = state.history.sales[i + 1].class
+                }
+            }
 
         }
     }
