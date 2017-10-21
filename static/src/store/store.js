@@ -27,7 +27,7 @@ export default new Vuex.Store({
             deltaClass: null
         },
         history: {
-            sales: [],
+            sales: [], // { size, price, sequence, change }
             lastSize: '',
             lastPrice: '',
             sequence: null
@@ -65,19 +65,35 @@ export default new Vuex.Store({
                 size: sale.last_size,
                 price: sale.price,
                 time: sale.time,
-                sequence: sale.sequence
+                sequence: sale.sequence,
+                change: ''
             }
             state.history.sales.unshift(x)
             state.history.sales.lastSize = sale.last_size
             state.history.sales.lastPrice = sale.price
             state.history.sales.sequence = sale.sequence
+
+            // set price delta sign
+            var length = state.history.sales.length
+            state.history.sales[length - 1].change = '=' // set last value to no change
+
+            for (var i = length-2; i >= 0; i--) {
+                if (state.history.sales[i].price > state.history.sales[i+1].price) {
+                    state.history.sales[i].change = '+'
+                } else if (state.history.sales[i].price < state.history.sales[i + 1].price) {
+                    state.history.sales[i].change = '-'
+                } else {
+                    state.history.sales[i].change = '='
+                }
+            }
         },
         addSaleNonsequential(state, sale) {
             var x = {
                 size: sale.last_size,
                 price: sale.price,
                 time: sale.time,
-                sequence: sale.sequence
+                sequence: sale.sequence,
+                change: ''
             }
             state.history.sales = _.chain(state.history.sales)
                                         .concat(x)

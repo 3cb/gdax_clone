@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav class="level info is-marginless is-paddingless">
+    <nav class="level info is-marginless">
         <div class="level-item has-text-centered">
             <div>
                 <p class="has-text-weight-bold">{{ selectedProduct.last }} {{ tickerDenom }}</p>

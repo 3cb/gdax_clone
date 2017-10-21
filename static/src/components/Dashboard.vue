@@ -1,18 +1,16 @@
 <template>
-    <div>
-        <div class="columns">
-            <div class="column is-narrow">
-                <tradebar></tradebar>
-            </div>
-            <div class="column is-3">
-                <order-book></order-book>
-            </div>
-            <div class="column">
-                <chart></chart>
-            </div>
-            <div class="column is-3">
-                <trade-history></trade-history>
-            </div>
+    <div class="columns">
+        <div class="column is-narrow">
+            <tradebar></tradebar>
+        </div>
+        <div class="column is-3">
+            <order-book></order-book>
+        </div>
+        <div class="column">
+            <chart></chart>
+        </div>
+        <div class="column is-3">
+            <trade-history></trade-history>
         </div>
     </div>
 </template>
