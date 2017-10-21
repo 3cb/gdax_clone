@@ -28,9 +28,18 @@ export default {
         var store = this.$store
         return {
             ws: null,
+            // ***For debugging -- Remove =================
+            mainListener: {
+                next(value) {
+                    if (value.type === "subscriptions") {
+                        console.log(value)
+                    }
+                }
+            },
+            // ============================================
             tickerListener: {
                 next(value) {
-                    console.log(value)
+                    console.log(value) // For debuggin -- Remove
                     store.commit('tickerUpdate', value)
                 },
                 error(err) {
@@ -58,26 +67,29 @@ export default {
         }
     },
     computed: {
+        subscriptions() {
+            return this.$store.state.subscriptions
+        },
         wsConnected() {
             return this.$store.state.wsConnected
         },
         producer() {
             var store = this.$store
+            var sub = this.subscriptions
+            console.log("xxxx", sub)
             return {
                 start(listener) {
                     this.ws = new WebSocket("wss://ws-feed.gdax.com")
                     var sock = this.ws
                     this.ws.onopen = (event) => {
-                        console.log(event)
+                        console.log(event) // For debugging -- Remove
                         store.commit('toggleWS')
                         sock.send(JSON.stringify({
                             "type": "subscribe",
-                            "product_ids": [
-                                "BTC-USD"
-                            ],
+                            "product_ids": [ "BTC-USD", "BTC-EUR", "BTC-GBP", "ETH-USD", "ETH-BTC", "ETH-EUR", "LTC-USD", "LTC-BTC", "LTC-EUR" ],
                             "channels": [
-                                // "level2",
-                                // "heartbeat"
+                                "level2",
+                                "heartbeat",
                                 "ticker"
                             ]
                         }))
@@ -103,11 +115,11 @@ export default {
         },
         history$() {
             return xs.from(this.main$)
-                .drop(1)
-                .filter(v => v.type === "ticker" && v.product_id === this.$store.state.selectedProduct.productId)
+                .filter(v => v.type === "ticker" && v.product_id === this.$store.state.selectedProduct.productId && v.time)
         }
     },
     beforeMount() {
+        this.main$.addListener(this.mainListener)
         this.ticker$.addListener(this.tickerListener)
         this.history$.addListener(this.historyListener)
     },

@@ -20,8 +20,16 @@ export default new Vuex.Store({
 
         ],
         selectedProduct: { id: 1, name: "BTC/USD", productId: "BTC-USD", last: null, priceDelta24h: null, volume24h: null },
-        marginOn: false,
         wsConnected: false,
+        subscriptions: {
+            "type": "subscribe",
+            "product_ids": [ "BTC-USD", "BTC-EUR", "BTC-GBP", "ETH-USD", "ETC-BTC", "ETH-EUR", "LTC-USD", "LTC-BTC", "LTC-EUR" ],
+            "channels": [
+                "level2",
+                "heartbeat",
+                "ticker"
+            ]
+        },
         ticker: {
             sequence: null,
             deltaClass: null
@@ -30,12 +38,18 @@ export default new Vuex.Store({
             sales: [], // { size, price, sequence, change, class }
             lastSize: '',
             lastPrice: '',
-            sequence: null
+            sequence: null // int
         }
     },
     mutations: {
         updateProduct(state, product) {
             state.selectedProduct = product
+            state.history = {
+                sales: [],
+                lastSize: '',
+                lastPrice: '',
+                sequence: null
+            }
         },
         toggleWS(state) {
             state.wsConnected = !state.wsConnected
@@ -123,7 +137,6 @@ export default new Vuex.Store({
                     state.history.sales[i].class = state.history.sales[i + 1].class
                 }
             }
-
         }
     }
 })
