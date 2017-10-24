@@ -9,40 +9,40 @@
         <nav class="level info is-marginless is-paddingless">
             <span class="is-uppercase has-text-weight-semibold">Trade History</span>
         </nav>
-        <time-sales class="is-marginless is-paddingless" :data="sales"></time-sales>
+        <time-sales class="is-marginless is-paddingless" :data="sales" :denom="tickerDenom"></time-sales>
     </div>
 </template>
 
 <script>
-import TimeSales from './TimeSales.vue'
-import _ from 'lodash'
+import TimeSales from "./TimeSales.vue";
+import _ from "lodash";
 
 export default {
   data() {
-    return {
-    }
+    return {};
   },
   computed: {
-      index() {
-          return _.findIndex(this.$store.state.products, (o) => { return o.id === this.$store.state.selected_id })
-      },
+    index() {
+      return _.findIndex(this.$store.state.products, o => {
+        return o.id === this.$store.state.selected_id;
+      });
+    },
     tickerDenom() {
       var arr = _.split(this.$store.state.products[this.index].name, "/");
       return arr[1];
     },
     sales() {
-      return this.$store.state.products[this.index].sales
+      return this.$store.state.products[this.index].sales;
     }
   },
   components: {
-      TimeSales
+    TimeSales
   }
-}
+};
 </script>
 
 <style>
 #container {
-    height: 100%;
+  height: 100%;
 }
-
 </style>

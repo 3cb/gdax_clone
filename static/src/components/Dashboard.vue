@@ -48,11 +48,6 @@ export default {
             },
             salesListener: {
                 next(value) {
-                    // ================ Debugging -- Remove ==============
-                    // if(value.product_id === "BTC-USD") {
-                    //     console.log(value)
-                    // }
-                    // ===================================================
                     store.commit('addSale', value)
                 },
                 error(err) {

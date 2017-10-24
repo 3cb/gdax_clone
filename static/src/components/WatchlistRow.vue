@@ -8,7 +8,7 @@
                     <span class="icon" v-if="product.product_id.split('-')[1] === 'EUR'"><i class="fa fa-eur" aria-hidden="true"></i></span>
                     <span class="icon" v-if="product.product_id.split('-')[1] === 'GBP'"><i class="fa fa-gbp" aria-hidden="true"></i></span>
                     <span class="icon" v-if="product.product_id.split('-')[1] === 'BTC'"><i class="fa fa-btc" aria-hidden="true"></i></span>
-                {{ product | decimals }}</span>
+                {{ product.price | decimals }}</span>
                 <span :class="product.deltaClass" class="watchlist-span-one has-text-right">{{ product.priceDelta24h }}%</span>
                 <span :class="product.deltaClass" class="icon" v-if="product.priceDelta24h > 0">
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -22,42 +22,42 @@
 </template>
 
 <script>
-import { addCommas } from '../lib/numbers.js'
+import { addCommas } from "../lib/numbers.js";
 
 export default {
-    props: ['products'],
-    filters: {
-        decimals(product) {
-            if (product.price < 1 ) {
-                return addCommas((parseFloat(product.price)).toFixed(5))
-            } else {
-                return addCommas((parseFloat(product.price)).toFixed(2))
-            }
-        }
+  props: ["products"],
+  filters: {
+    decimals(price) {
+      if (price < 1) {
+        return addCommas(parseFloat(price).toFixed(5));
+      } else {
+        return addCommas(parseFloat(price).toFixed(2));
+      }
     }
-}
+  }
+};
 </script>
 
 <style>
 .watchlist-span-one {
-    display: inline-block;
-    width: 27%;
+  display: inline-block;
+  width: 27%;
 }
 
 span.icon {
-    display: inline-block;
-    width: 7%;
+  display: inline-block;
+  width: 7%;
 }
 
 a {
-    color: #4a4a4a;
+  color: #4a4a4a;
 }
 
 a:hover {
-    color: hsl(171, 100%, 41%);
+  color: hsl(171, 100%, 41%);
 }
 
 li a:hover {
-    background-color: whitesmoke;
+  background-color: whitesmoke;
 }
 </style>

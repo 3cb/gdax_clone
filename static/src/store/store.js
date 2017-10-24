@@ -9,19 +9,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         products: getProducts(['BTC/USD', 'BTC/EUR', 'BTC/GBP', 'ETH/USD', 'ETH/BTC', 'ETH/EUR', 'LTC/USD', 'LTC/BTC', 'LTC/EUR']),
-        selectedProduct: { id: 1, name: "BTC/USD", product_id: "BTC-USD", price: null, priceDelta24h: null, volume_24h: null },
         selected_id: 1,
         wsConnected: false,
-        ticker: {
-            sequence: null,
-            deltaClass: null
-        },
-        history: {
-            sales: [], // { size, price, sequence, change, class }
-            lastSize: '',
-            lastPrice: '',
-            sequence: null // int
-        }
     },
     mutations: {
         toggleWS(state) {
@@ -59,8 +48,6 @@ export default new Vuex.Store({
         addSale(state, sale) {
             var i = _.findIndex(state.products, (o) => { return o.product_id === sale.product_id })
             var x = _.clone(sale)
-            // console.log("sale:", sale)
-            // console.log("x:", x)
             x.change = ''
             x.class = ''
 
