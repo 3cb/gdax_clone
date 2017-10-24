@@ -10,6 +10,7 @@ export default new Vuex.Store({
     state: {
         products: getProducts(['BTC/USD', 'BTC/EUR', 'BTC/GBP', 'ETH/USD', 'ETH/BTC', 'ETH/EUR', 'LTC/USD', 'LTC/BTC', 'LTC/EUR']),
         selected_id: 1,
+        selected_product: 'BTC-USD',
         wsConnected: false,
     },
     mutations: {
@@ -18,6 +19,7 @@ export default new Vuex.Store({
         },
         updateProduct(state, id) {
             state.selected_id = id
+            state.selected_product = (_.find(state.products, o => { return o.id === state.selected_id })).product_id
         },
         initProducts(state, ticker) {
             // find correct product

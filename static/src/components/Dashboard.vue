@@ -16,106 +16,134 @@
 </template>
 
 <script>
-import FirstColumn from './FirstColumn.vue'
-import SecondColumn from './SecondColumn.vue'
-import ThirdColumn from './ThirdColumn.vue'
-import FourthColumn from './FourthColumn.vue'
-import xs from 'xstream'
-import _ from 'lodash'
+import FirstColumn from "./FirstColumn.vue";
+import SecondColumn from "./SecondColumn.vue";
+import ThirdColumn from "./ThirdColumn.vue";
+import FourthColumn from "./FourthColumn.vue";
+import xs from "xstream";
+import _ from "lodash";
 
 export default {
-    data() {
-        var store = this.$store
-        return {
-            ws: null,
-            // === For debugging -- Remove ================
-            mainListener: {
-                next(value) {
-                        // console.log(value)
-                }
-            },
-            // ============================================
-            initListener: {
-                next(value) {
-                    store.commit('initProducts', value)
-                },
-                error(err) {
-                    console.log("Error from websocket - watchlistListener: ", err)
-                },
-                complete() {
-                    console.log("Watchlist stream complete.")
-                }
-            },
-            salesListener: {
-                next(value) {
-                    store.commit('addSale', value)
-                },
-                error(err) {
-                    console.log('Error from websocket - historyListener: ', err)
-                },
-                complete() {
-                    console.log('History channel complete.')
-                }
-            }
+  data() {
+    var store = this.$store;
+    return {
+      ws: null,
+      // === For debugging -- Remove ================
+      mainListener: {
+        next(value) {
+          // console.log(value)
         }
-    },
-    computed: {
-        wsConnected() {
-            return this.$store.state.wsConnected
+      },
+      // ============================================
+      initListener: {
+        next(value) {
+          store.commit("initProducts", value);
         },
-        producer() {
-            var store = this.$store
-            return {
-                start(listener) {
-                    this.ws = new WebSocket("wss://ws-feed.gdax.com")
-                    var sock = this.ws
-                    this.ws.onopen = (event) => {
-                        store.commit('toggleWS')
-                        sock.send(JSON.stringify({
-                            "type": "subscribe",
-                            "product_ids": [ "BTC-USD", "BTC-EUR", "BTC-GBP", "ETH-USD", "ETH-BTC", "ETH-EUR", "LTC-USD", "LTC-BTC", "LTC-EUR" ],
-                            "channels": [
-                                "level2",
-                                "ticker"
-                            ]
-                        }))
-                    }
-                    this.ws.onmessage = (event) => {
-                        listener.next(JSON.parse(event.data))
-                    }
-                },
-                stop() {
-                    this.ws.close()
-                    this.ws.onclose = (event) => {
-                        console.log(event)
-                    }
-                }
-            }
+        error(err) {
+          console.log("Error from websocket - watchlistListener: ", err);
         },
-        main$() {
-            return xs.createWithMemory(this.producer)
-        },
-        init$() {
-            return xs.from(this.main$)
-                .filter(v => v.type === "ticker" && !v.time)
-        },
-        sales$() {
-            return xs.from(this.main$)
-                .filter(v => v.type === "ticker" && v.time)
+        complete() {
+          console.log("Watchlist stream complete.");
         }
+      },
+      salesListener: {
+        next(value) {
+          store.commit("addSale", value);
+        },
+        error(err) {
+          console.log("Error from websocket - historyListener: ", err);
+        },
+        complete() {
+          console.log("History channel complete.");
+        }
+      },
+      bookInitListener: {
+        next(value) {
+          console.log(value);
+        },
+        error(err) {
+          console.log("error from websocket - bookInitListener: ", err);
+        },
+        complete() {
+          console.log("Book initialization stream complete.");
+        }
+      }
+    };
+  },
+  computed: {
+    wsConnected() {
+      return this.$store.state.wsConnected;
     },
-    beforeMount() {
-        this.main$.addListener(this.mainListener)
-        this.init$.addListener(this.initListener)
-        this.sales$.addListener(this.salesListener)
+    producer() {
+      var store = this.$store;
+      return {
+        start(listener) {
+          this.ws = new WebSocket("wss://ws-feed.gdax.com");
+          var sock = this.ws;
+          this.ws.onopen = event => {
+            store.commit("toggleWS");
+            sock.send(
+              JSON.stringify({
+                type: "subscribe",
+                product_ids: [
+                  "BTC-USD",
+                  "BTC-EUR",
+                  "BTC-GBP",
+                  "ETH-USD",
+                  "ETH-BTC",
+                  "ETH-EUR",
+                  "LTC-USD",
+                  "LTC-BTC",
+                  "LTC-EUR"
+                ],
+                channels: ["level2", "ticker"]
+              })
+            );
+          };
+          this.ws.onmessage = event => {
+            listener.next(JSON.parse(event.data));
+          };
+        },
+        stop() {
+          this.ws.close();
+          this.ws.onclose = event => {
+            console.log(event);
+          };
+        }
+      };
     },
-    components: {
-        FirstColumn,
-        SecondColumn,
-        ThirdColumn,
-        FourthColumn
+    main$() {
+      return xs.createWithMemory(this.producer);
+    },
+    init$() {
+      return xs.from(this.main$).filter(v => v.type === "ticker" && !v.time);
+    },
+    sales$() {
+      return xs.from(this.main$).filter(v => v.type === "ticker" && v.time);
+    },
+    bookInit$() {
+      return xs
+        .from(this.main$)
+        .filter(
+          v =>
+            v.type === "snapshot" &&
+            v.product_id === this.$store.state.selected_product
+        );
     }
-}
+  },
+  beforeMount() {
+    this.main$.addListener(this.mainListener);
+    this.init$.addListener(this.initListener);
+    this.sales$.addListener(this.salesListener);
+    this.bookInit$.addListener(this.bookInitListener);
+  },
+  components: {
+    FirstColumn,
+    SecondColumn,
+    ThirdColumn,
+    FourthColumn
+  }
+};
 </script>
 
 <style>

@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for="product in products" :key="product.id">
-            <a>
+            <a @click="changeProduct(product.id)">
                 <span class="watchlist-span-one has-text-left">{{ product.name }}</span>
                 <span class="watchlist-span-one has-text-right">
                     <span class="icon" v-if="product.product_id.split('-')[1] === 'USD'"><i class="fa fa-usd" aria-hidden="true"></i></span>
@@ -33,6 +33,11 @@ export default {
       } else {
         return addCommas(parseFloat(price).toFixed(2));
       }
+    }
+  },
+  methods: {
+    changeProduct(id) {
+      this.$store.commit('updateProduct', id)
     }
   }
 };
