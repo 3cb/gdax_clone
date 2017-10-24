@@ -1,25 +1,25 @@
 <template>
     <div class="columns">
-        <div class="column is-narrow">
-            <tradebar></tradebar>
+        <div class="column is-2">
+            <first-column></first-column>
         </div>
         <div class="column is-3">
-            <order-book></order-book>
+            <second-column></second-column>
         </div>
         <div class="column">
-            <chart></chart>
+            <third-column></third-column>
         </div>
         <div class="column is-3">
-            <trade-history></trade-history>
+            <fourth-column></fourth-column>
         </div>
     </div>
 </template>
 
 <script>
-import Tradebar from './Tradebar.vue'
-import OrderBook from './OrderBook.vue'
-import Chart from './Chart.vue'
-import TradeHistory from './TradeHistory.vue'
+import FirstColumn from './FirstColumn.vue'
+import SecondColumn from './SecondColumn.vue'
+import ThirdColumn from './ThirdColumn.vue'
+import FourthColumn from './FourthColumn.vue'
 import xs from 'xstream'
 import _ from 'lodash'
 
@@ -28,34 +28,32 @@ export default {
         var store = this.$store
         return {
             ws: null,
-            // ***For debugging -- Remove =================
+            // === For debugging -- Remove ================
             mainListener: {
                 next(value) {
-                    if (value.type === "subscriptions") {
-                        console.log(value)
-                    }
+                        // console.log(value)
                 }
             },
             // ============================================
-            tickerListener: {
+            initListener: {
                 next(value) {
-                    console.log(value) // For debuggin -- Remove
-                    store.commit('tickerUpdate', value)
+                    store.commit('initProducts', value)
                 },
                 error(err) {
-                    console.log("Error from websocket - tickerListener:", err)
+                    console.log("Error from websocket - watchlistListener: ", err)
                 },
                 complete() {
-                    console.log("Ticker channel stream complete.")
+                    console.log("Watchlist stream complete.")
                 }
             },
-            historyListener: {
+            salesListener: {
                 next(value) {
-                    if (value.sequence > store.state.history.sequence) {
-                        store.commit('addSaleSequential', value)
-                    } else {
-                        store.commit('addSaleNonsequential', value)
-                    }
+                    // ================ Debugging -- Remove ==============
+                    // if(value.product_id === "BTC-USD") {
+                    //     console.log(value)
+                    // }
+                    // ===================================================
+                    store.commit('addSale', value)
                 },
                 error(err) {
                     console.log('Error from websocket - historyListener: ', err)
@@ -67,29 +65,22 @@ export default {
         }
     },
     computed: {
-        subscriptions() {
-            return this.$store.state.subscriptions
-        },
         wsConnected() {
             return this.$store.state.wsConnected
         },
         producer() {
             var store = this.$store
-            var sub = this.subscriptions
-            console.log("xxxx", sub)
             return {
                 start(listener) {
                     this.ws = new WebSocket("wss://ws-feed.gdax.com")
                     var sock = this.ws
                     this.ws.onopen = (event) => {
-                        console.log(event) // For debugging -- Remove
                         store.commit('toggleWS')
                         sock.send(JSON.stringify({
                             "type": "subscribe",
                             "product_ids": [ "BTC-USD", "BTC-EUR", "BTC-GBP", "ETH-USD", "ETH-BTC", "ETH-EUR", "LTC-USD", "LTC-BTC", "LTC-EUR" ],
                             "channels": [
                                 "level2",
-                                "heartbeat",
                                 "ticker"
                             ]
                         }))
@@ -109,25 +100,25 @@ export default {
         main$() {
             return xs.createWithMemory(this.producer)
         },
-        ticker$() {
+        init$() {
             return xs.from(this.main$)
-                .filter(v => v.type === "ticker" && v.sequence > this.$store.state.ticker.sequence && v.product_id === this.$store.state.selectedProduct.productId)
+                .filter(v => v.type === "ticker" && !v.time)
         },
-        history$() {
+        sales$() {
             return xs.from(this.main$)
-                .filter(v => v.type === "ticker" && v.product_id === this.$store.state.selectedProduct.productId && v.time)
+                .filter(v => v.type === "ticker" && v.time)
         }
     },
     beforeMount() {
         this.main$.addListener(this.mainListener)
-        this.ticker$.addListener(this.tickerListener)
-        this.history$.addListener(this.historyListener)
+        this.init$.addListener(this.initListener)
+        this.sales$.addListener(this.salesListener)
     },
     components: {
-        Tradebar,
-        OrderBook,
-        Chart,
-        TradeHistory
+        FirstColumn,
+        SecondColumn,
+        ThirdColumn,
+        FourthColumn
     }
 }
 </script>

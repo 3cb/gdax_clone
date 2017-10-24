@@ -1,0 +1,63 @@
+<template>
+    <ul>
+        <li v-for="product in products" :key="product.id">
+            <a>
+                <span class="watchlist-span-one has-text-left">{{ product.name }}</span>
+                <span class="watchlist-span-one has-text-right">
+                    <span class="icon" v-if="product.product_id.split('-')[1] === 'USD'"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                    <span class="icon" v-if="product.product_id.split('-')[1] === 'EUR'"><i class="fa fa-eur" aria-hidden="true"></i></span>
+                    <span class="icon" v-if="product.product_id.split('-')[1] === 'GBP'"><i class="fa fa-gbp" aria-hidden="true"></i></span>
+                    <span class="icon" v-if="product.product_id.split('-')[1] === 'BTC'"><i class="fa fa-btc" aria-hidden="true"></i></span>
+                {{ product | decimals }}</span>
+                <span :class="product.deltaClass" class="watchlist-span-one has-text-right">{{ product.priceDelta24h }}%</span>
+                <span :class="product.deltaClass" class="icon" v-if="product.priceDelta24h > 0">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </span>
+                <span :class="product.deltaClass" class="icon" v-if="product.priceDelta24h < 0">
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </span>
+            </a>
+        </li>
+    </ul>
+</template>
+
+<script>
+import { addCommas } from '../lib/numbers.js'
+
+export default {
+    props: ['products'],
+    filters: {
+        decimals(product) {
+            if (product.price < 1 ) {
+                return addCommas((parseFloat(product.price)).toFixed(5))
+            } else {
+                return addCommas((parseFloat(product.price)).toFixed(2))
+            }
+        }
+    }
+}
+</script>
+
+<style>
+.watchlist-span-one {
+    display: inline-block;
+    width: 27%;
+}
+
+span.icon {
+    display: inline-block;
+    width: 7%;
+}
+
+a {
+    color: #4a4a4a;
+}
+
+a:hover {
+    color: hsl(171, 100%, 41%);
+}
+
+li a:hover {
+    background-color: whitesmoke;
+}
+</style>

@@ -15,7 +15,7 @@
 
 <script>
 import TimeSales from './TimeSales.vue'
-import _ from "lodash";
+import _ from 'lodash'
 
 export default {
   data() {
@@ -23,12 +23,15 @@ export default {
     }
   },
   computed: {
+      index() {
+          return _.findIndex(this.$store.state.products, (o) => { return o.id === this.$store.state.selected_id })
+      },
     tickerDenom() {
-      var arr = _.split(this.$store.state.selectedProduct.name, "/");
+      var arr = _.split(this.$store.state.products[this.index].name, "/");
       return arr[1];
     },
     sales() {
-      return this.$store.state.history.sales;
+      return this.$store.state.products[this.index].sales
     }
   },
   components: {

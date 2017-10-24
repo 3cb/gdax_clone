@@ -6,13 +6,15 @@
             <span class="sales-span has-text-centered">Time</span>
         </li>
         <li v-for="(sale, index) in data" :key="sale.sequence">
-            <span class="sales-span has-text-centered">{{ sale.size }}</span>
-            <span :class="sale.class">{{ parseFloat(sale.price).toFixed(2) }}
-                <span class="icon" v-if="sale.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
-                <span class="icon" v-if="sale.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
-                <span class="icon" v-if="sale.change === '='"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-            </span>
-            <span class="sales-span has-text-centered">{{ sale.time | formatDate }}</span>
+            <a>
+                <span class="sales-span has-text-centered">{{ sale.last_size }}</span>
+                <span :class="sale.class">{{ parseFloat(sale.price).toFixed(2) }}
+                    <span class="icon" v-if="sale.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
+                    <span class="icon" v-if="sale.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
+                    <span class="icon" v-if="sale.change === '='"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
+                </span>
+                <span class="sales-span has-text-centered">{{ sale.time | formatDate }}</span>
+            </a>
         </li>
     </ul>
 </template>
