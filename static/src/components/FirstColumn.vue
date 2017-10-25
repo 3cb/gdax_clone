@@ -2,7 +2,7 @@
     <div>
         <nav class="level info is-paddingless is-marginless">
             <span class="level-item">
-                <strong>GDAX</strong>
+                    <a href="https://www.gdax.com/"><strong>GDAX</strong></a>
             </span>
         </nav>
         <nav class="level info is-marginless is-paddingless">
