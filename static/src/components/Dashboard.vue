@@ -86,19 +86,7 @@ export default {
             sock.send(
               JSON.stringify({
                 type: "subscribe",
-                // product_ids: [
-                //   "BTC-USD",
-                //   "BTC-EUR",
-                //   "BTC-GBP",
-                //   "ETH-USD",
-                //   "ETH-BTC",
-                //   "ETH-EUR",
-                //   "LTC-USD",
-                //   "LTC-BTC",
-                //   "LTC-EUR"
-                // ],
                 channels: [
-                  // "ticker",
                   {
                     name: "ticker",
                     product_ids: [
