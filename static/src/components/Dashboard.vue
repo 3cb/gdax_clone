@@ -3,7 +3,7 @@
         <div class="column is-2">
             <first-column></first-column>
         </div>
-        <div class="column is-3">
+        <div class="column is-2">
             <second-column></second-column>
         </div>
         <div class="column">
@@ -60,6 +60,7 @@ export default {
       bookInitListener: {
         next(value) {
           console.log(value);
+          store.commit("initBook", value);
         },
         error(err) {
           console.log("error from websocket - bookInitListener: ", err);
@@ -85,18 +86,38 @@ export default {
             sock.send(
               JSON.stringify({
                 type: "subscribe",
-                product_ids: [
-                  "BTC-USD",
-                  "BTC-EUR",
-                  "BTC-GBP",
-                  "ETH-USD",
-                  "ETH-BTC",
-                  "ETH-EUR",
-                  "LTC-USD",
-                  "LTC-BTC",
-                  "LTC-EUR"
-                ],
-                channels: ["level2", "ticker"]
+                // product_ids: [
+                //   "BTC-USD",
+                //   "BTC-EUR",
+                //   "BTC-GBP",
+                //   "ETH-USD",
+                //   "ETH-BTC",
+                //   "ETH-EUR",
+                //   "LTC-USD",
+                //   "LTC-BTC",
+                //   "LTC-EUR"
+                // ],
+                channels: [
+                  // "ticker",
+                  {
+                    name: "ticker",
+                    product_ids: [
+                      "BTC-USD",
+                      "BTC-EUR",
+                      "BTC-GBP",
+                      "ETH-USD",
+                      "ETH-BTC",
+                      "ETH-EUR",
+                      "LTC-USD",
+                      "LTC-BTC",
+                      "LTC-EUR"
+                    ]
+                  },
+                  {
+                    name: "level2",
+                    product_ids: ["BTC-USD"]
+                  }
+                ]
               })
             );
           };
@@ -122,13 +143,10 @@ export default {
       return xs.from(this.main$).filter(v => v.type === "ticker" && v.time);
     },
     bookInit$() {
-      return xs
-        .from(this.main$)
-        .filter(
-          v =>
-            v.type === "snapshot" &&
-            v.product_id === this.$store.state.selected_product
-        );
+      return xs.from(this.main$).filter(v => v.type === "snapshot");
+    },
+    bookUpdate$() {
+      return xs.from(this.main$).filter(v => v.type === "l2update");
     }
   },
   beforeMount() {

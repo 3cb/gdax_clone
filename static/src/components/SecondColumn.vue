@@ -23,10 +23,12 @@
     <nav class="level info is-marginless is-paddingless">
         <span class="is-uppercase has-text-weight-semibold">Order Book</span>
     </nav>
+    <order-book></order-book>
 </div>
 </template>
 
 <script>
+import OrderBook from './OrderBook.vue'
 import _ from 'lodash'
 import { addCommas } from '../lib/numbers.js'
 
@@ -65,6 +67,9 @@ export default {
         deltaClass() {
             return this.selectedProduct.deltaClass
         }
+    },
+    components: {
+        OrderBook
     }
 }
 </script>

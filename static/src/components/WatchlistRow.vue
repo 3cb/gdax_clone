@@ -9,7 +9,7 @@
                     <span class="icon" v-if="product.product_id.split('-')[1] === 'GBP'"><i class="fa fa-gbp" aria-hidden="true"></i></span>
                     <span class="icon" v-if="product.product_id.split('-')[1] === 'BTC'"><i class="fa fa-btc" aria-hidden="true"></i></span>
                 {{ product.price | decimals }}</span>
-                <span :class="product.deltaClass" class="watchlist-span-one has-text-right">{{ product.priceDelta24h }}%</span>
+                <span :class="product.deltaClass" class="watchlist-span-one has-text-right">{{ Math.abs(product.priceDelta24h) }}%</span>
                 <span :class="product.deltaClass" class="icon" v-if="product.priceDelta24h > 0">
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
                 </span>
@@ -76,7 +76,8 @@ a:hover {
   color: hsl(171, 100%, 41%);
 }
 
-li a:hover {
+li:hover {
+  /* color: hsl(171, 100%, 41%); */
   background-color: hsl(0, 0%, 21%);
 }
 </style>

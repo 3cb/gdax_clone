@@ -11,9 +11,14 @@ export default new Vuex.Store({
         products: getProducts(['BTC/USD', 'BTC/EUR', 'BTC/GBP', 'ETH/USD', 'ETH/BTC', 'ETH/EUR', 'LTC/USD', 'LTC/BTC', 'LTC/EUR']),
         selected_id: 1,
         selected_product: 'BTC-USD',
+        selected_denom: 'USD',
+        salesDepth: 35,
         ws: null,
         wsConnected: false,
-        book: [],
+        book: {
+            asks: [],
+            bids: []
+        },
         bookConnected: false
     },
     mutations: {
@@ -22,11 +27,17 @@ export default new Vuex.Store({
         },
         updateProduct(state, id) {
             state.selected_id = id
-            state.selected_product = (_.find(state.products, o => { return o.id === state.selected_id })).product_id
+            state.selected_product = (_.find(state.products, o => {
+                return o.id === state.selected_id
+            })).product_id
+            var arr = _.split(state.selected_product, "-")
+            state.selected_denom = arr[1]
         },
         initProducts(state, ticker) {
             // find correct product
-            var i = _.findIndex(state.products, (o) => { return o.product_id === ticker.product_id })
+            var i = _.findIndex(state.products, (o) => {
+                return o.product_id === ticker.product_id
+            })
 
             // set values from ticker message
             // state.products[i].best_ask = ticker.best_ask
@@ -51,7 +62,9 @@ export default new Vuex.Store({
             // console.log(state.products[i])
         },
         addSale(state, sale) {
-            var i = _.findIndex(state.products, (o) => { return o.product_id === sale.product_id })
+            var i = _.findIndex(state.products, (o) => {
+                return o.product_id === sale.product_id
+            })
             var x = _.clone(sale)
             x.change = ''
             x.class = ''
@@ -60,10 +73,10 @@ export default new Vuex.Store({
             if (sale.sequence > state.products[i].sequence) {
                 // add new sale to begining of sales array and limit array to last 100 sales
                 state.products[i].sales.unshift(x)
-                if (state.products[i].sales.length > 50) {
+                if (state.products[i].sales.length > state.salesDepth) {
                     state.products[i].sales.pop()
                 }
-               
+
                 // state.products[i].best_ask = x.best_ask
                 // state.products[i].best_bid = x.best_bid
                 // state.products[i].high_24h = x.high_24h
@@ -91,33 +104,41 @@ export default new Vuex.Store({
                 console.log("Out of Sequence")
                 // add new sale to array and sort by sequence number
                 state.products[i].sales = _.chain(state.products[i].sales)
-                                        .concat(x)
-                                        .orderBy((o) => { o.sequence }, ['desc'])
-                                        .value()
+                                                .concat(x)
+                                                .orderBy((o) => {
+                                                    o.sequence
+                                                }, ['desc'])
+                                                .value()
 
-                if (state.products[i].sales.length > 50) {
+                if (state.products[i].sales.length > state.salesDepth) {
                     state.products[i].sales.pop()
                 }
             }
-            
-            
+
+
 
             var length = state.products[i].sales.length
-            state.products[i].sales[length-1].change = '=' // set last value to no change
-            state.products[i].sales[length-1].class = 'sales-span has-text-centered'
+            state.products[i].sales[length - 1].change = '=' // set last value to no change
+            state.products[i].sales[length - 1].class = 'sales-span has-text-right'
 
-            
-            for (let j = length-2; j >= 0; j--) {
-                if (state.products[i].sales[j].price > state.products[i].sales[j+1].price) {
+
+            for (let j = length - 2; j >= 0; j--) {
+                if (state.products[i].sales[j].price > state.products[i].sales[j + 1].price) {
                     state.products[i].sales[j].change = '+'
-                    state.products[i].sales[j].class = 'sales-span has-text-centered has-text-success'
-                } else if (state.products[i].sales[j].price < state.products[i].sales[j+1].price) {
+                    state.products[i].sales[j].class = 'sales-span has-text-right has-text-success'
+                } else if (state.products[i].sales[j].price < state.products[i].sales[j + 1].price) {
                     state.products[i].sales[j].change = '-'
-                    state.products[i].sales[j].class = 'sales-span has-text-centered has-text-danger'
+                    state.products[i].sales[j].class = 'sales-span has-text-right has-text-danger'
                 } else {
                     state.products[i].sales[j].change = '='
-                    state.products[i].sales[j].class = state.products[i].sales[j+1].class
+                    state.products[i].sales[j].class = state.products[i].sales[j + 1].class
                 }
+            }
+        },
+        initBook(state, book) {
+            state.book = {
+                asks: book.asks,
+                bids: book.bids
             }
         }
     }

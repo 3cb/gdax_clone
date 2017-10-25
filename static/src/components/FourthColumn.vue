@@ -28,8 +28,7 @@ export default {
       });
     },
     tickerDenom() {
-      var arr = _.split(this.$store.state.products[this.index].name, "/");
-      return arr[1];
+      return this.$store.state.selected_denom
     },
     sales() {
       return this.$store.state.products[this.index].sales;
