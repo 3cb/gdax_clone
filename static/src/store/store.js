@@ -13,6 +13,7 @@ export default new Vuex.Store({
         selected_product: 'BTC-USD',
         ws: null,
         wsConnected: false,
+        book: [],
         bookConnected: false
     },
     mutations: {

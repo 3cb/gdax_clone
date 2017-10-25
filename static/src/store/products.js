@@ -6,7 +6,6 @@ function getProducts(array) {
             name: array[i],
             deltaClass: null,
             sales: [], // 
-            book: [],
             best_ask: null,
             best_bid: null,
             high_24h: null,

@@ -37,7 +37,21 @@ export default {
   },
   methods: {
     changeProduct(id) {
-      this.$store.commit('updateProduct', id)
+      this.$store.state.ws.send(
+        JSON.stringify({
+          type: "unsubscribe",
+          product_ids: [this.$store.selected_product],
+          channels: ["level2"]
+        })
+      );
+      this.$store.commit("updateProduct", id);
+      this.$store.state.ws.send(
+        JSON.stringify({
+          type: "subscribe",
+          product_ids: [this.$store.state.selected_product],
+          channels: ["level2"]
+        })
+      );
     }
   }
 };
@@ -63,6 +77,6 @@ a:hover {
 }
 
 li a:hover {
-  background-color: whitesmoke;
+  background-color: hsl(0, 0%, 21%);
 }
 </style>
