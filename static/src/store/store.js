@@ -11,7 +11,9 @@ export default new Vuex.Store({
         products: getProducts(['BTC/USD', 'BTC/EUR', 'BTC/GBP', 'ETH/USD', 'ETH/BTC', 'ETH/EUR', 'LTC/USD', 'LTC/BTC', 'LTC/EUR']),
         selected_id: 1,
         selected_product: 'BTC-USD',
+        ws: null,
         wsConnected: false,
+        bookConnected: false
     },
     mutations: {
         toggleWS(state) {

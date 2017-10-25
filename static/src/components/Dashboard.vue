@@ -78,9 +78,9 @@ export default {
       var store = this.$store;
       return {
         start(listener) {
-          this.ws = new WebSocket("wss://ws-feed.gdax.com");
-          var sock = this.ws;
-          this.ws.onopen = event => {
+          store.state.ws = new WebSocket("wss://ws-feed.gdax.com");
+          var sock = store.state.ws;
+          store.state.ws.onopen = event => {
             store.commit("toggleWS");
             sock.send(
               JSON.stringify({
@@ -100,13 +100,13 @@ export default {
               })
             );
           };
-          this.ws.onmessage = event => {
+          store.state.ws.onmessage = event => {
             listener.next(JSON.parse(event.data));
           };
         },
         stop() {
-          this.ws.close();
-          this.ws.onclose = event => {
+          store.state.ws.close();
+          store.state.ws.onclose = event => {
             console.log(event);
           };
         }
