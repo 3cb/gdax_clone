@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { addCommas } from '../lib/numbers.js'
 import _ from 'lodash'
+import moment from 'moment'
+import { addCommas } from '../lib/numbers.js'
 import { getProducts } from './products.js'
 
 Vue.use(Vuex)
@@ -16,10 +17,18 @@ export default new Vuex.Store({
         ws: null,
         wsConnected: false,
         book: {
-            asks: [],
-            bids: []
+            asks: [[0.00,0]],
+            bids: [[0.00,0]]
         },
-        bookConnected: false
+        bookConnected: false,
+        chartData: [],
+        time: [],
+        low: [],
+        high: [],
+        open: [],
+        close: [],
+        volume: [],
+        chartInterval: '1d'
     },
     mutations: {
         toggleWS(state) {
@@ -140,6 +149,25 @@ export default new Vuex.Store({
                 asks: book.asks,
                 bids: book.bids
             }
+        },
+        updateBook(state, update) {
+           
+        },
+        setChartData(state, data) {
+            for (var i = 0; i < data.length; i++) {
+                state.time[i] = moment.utc(data[i][0]*1000).local().toISOString().split('T')[0]
+                state.low[i] = data[i][1]
+                state.high[i] = data[i][2]
+                state.open[i] = data[i][3]
+                state.close[i] = data[i][4]
+                state.volume[i] = data[i][5]
+            }
+
+            // state.chartData = data.map(v => {
+            //     let date = moment.utc(v[0] * 1000).local().toISOString().split('T')
+            //     return [date[0], v[1], v[2], v[3], v[4]]
+            // }).reverse()
+            // console.log(state.chartData)
         }
     }
 })
