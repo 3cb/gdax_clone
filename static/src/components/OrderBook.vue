@@ -36,7 +36,7 @@ export default {
       return _.take(this.$store.state.book.bids, this.depth);
     },
     spread() {
-      return (this.asks[this.depth - 1][0] - this.bids[0][0]).toFixed(2);
+      return (_.last(this.asks)[0] - this.bids[0][0]).toFixed(2);
     }
   },
   components: {

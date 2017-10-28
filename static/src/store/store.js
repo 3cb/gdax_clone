@@ -49,6 +49,7 @@ export default new Vuex.Store({
             })
 
             // set values from ticker message
+            // =========== may use these variables later
             // state.products[i].best_ask = ticker.best_ask
             // state.products[i].best_bid = ticker.best_bid
             // state.products[i].high_24h = ticker.high_24h
@@ -85,6 +86,8 @@ export default new Vuex.Store({
                 if (state.products[i].sales.length > state.salesDepth) {
                     state.products[i].sales.pop()
                 }
+
+                // =========== may use these variables later
 
                 // state.products[i].best_ask = x.best_ask
                 // state.products[i].best_bid = x.best_bid
@@ -162,12 +165,26 @@ export default new Vuex.Store({
                 state.close[i] = data[i][4]
                 state.volume[i] = data[i][5]
             }
+        },
+        updateChartData(state, update) {
+            // check date of sale to determine if new bar needs to be added to chart
+            var t = moment.utc(update.time).local().toISOString().split('T')[0]
 
-            // state.chartData = data.map(v => {
-            //     let date = moment.utc(v[0] * 1000).local().toISOString().split('T')
-            //     return [date[0], v[1], v[2], v[3], v[4]]
-            // }).reverse()
-            // console.log(state.chartData)
+            if (update.price != state.close[0] && t === state.time[0]) {
+                // replace current price
+                state.close.shift()
+                state.close.unshift(update.price)
+                // check to set new high/low
+                state.low[0] = update.price < state.low[0] ? update.price : state.low[0]
+                state.high[0] = update.price > state.high[0] ? update.price : state.high[0]
+            } else if (t != state.time[0]) {
+                // add new bar to dataset
+                state.close.unshift(update.price)
+                state.low.unshift(update.price)
+                state.high.unshift(update.price)
+                state.open.unshift(update.price)
+                state.time.unshift(t)
+            }
         }
     }
 })

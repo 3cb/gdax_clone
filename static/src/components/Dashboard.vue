@@ -21,6 +21,7 @@ import SecondColumn from "./SecondColumn.vue";
 import ThirdColumn from "./ThirdColumn.vue";
 import FourthColumn from "./FourthColumn.vue";
 import xs from "xstream";
+import axios from "axios";
 import _ from "lodash";
 
 export default {
@@ -37,6 +38,8 @@ export default {
       // ============================================
       initListener: {
         next(value) {
+          console.log(value);
+
           store.commit("initProducts", value);
         },
         error(err) {
@@ -48,6 +51,7 @@ export default {
       },
       salesListener: {
         next(value) {
+          // console.log(value);
           store.commit("addSale", value);
         },
         error(err) {
@@ -59,19 +63,45 @@ export default {
       },
       bookInitListener: {
         next(value) {
-          console.log(value);
+          // console.log(value);
           store.commit("initBook", value);
         },
         error(err) {
-          console.log("error from websocket - bookInitListener: ", err);
+          console.log("Error from websocket - bookInitListener: ", err);
         },
         complete() {
           console.log("Book initialization stream complete.");
+        }
+      },
+      bookUpdateListener: {
+        next(value) {
+          // console.log(value);
+          // store.commit("updateBook", value);
+        },
+        error(err) {
+          console.log("Error from websocket - bookUpdateListener: ", err);
+        },
+        complete() {
+          console.log("Book update stream complete.");
+        }
+      },
+      chartUpdateListener: {
+        next(value) {
+          store.commit('updateChartData', value)
+        },
+        error(err) {
+          console.log("Error from websocket - chartUpdateListener: ", err)
+        },
+        complete() {
+          console.log("Chart update stream complete")
         }
       }
     };
   },
   computed: {
+    selected_product() {
+      return this.$store.state.selected_product
+    },
     wsConnected() {
       return this.$store.state.wsConnected;
     },
@@ -134,7 +164,15 @@ export default {
       return xs.from(this.main$).filter(v => v.type === "snapshot");
     },
     bookUpdate$() {
-      return xs.from(this.main$).filter(v => v.type === "l2update");
+      return xs
+        .from(this.main$)
+        .filter(v => v.type === "l2update")
+        .map(v => v.changes[0]);
+    },
+    chart$() {
+      var product = this.selected_product
+      return xs.from(this.main$)
+        .filter(v => v.type === "ticker" && v.time && v.product_id === product)
     }
   },
   beforeMount() {
@@ -142,6 +180,8 @@ export default {
     this.init$.addListener(this.initListener);
     this.sales$.addListener(this.salesListener);
     this.bookInit$.addListener(this.bookInitListener);
+    this.bookUpdate$.addListener(this.bookUpdateListener);
+    this.chart$.addListener(this.chartUpdateListener)
   },
   components: {
     FirstColumn,

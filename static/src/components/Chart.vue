@@ -1,28 +1,7 @@
 <template>
     <div id="chart-cont">
         <ul>
-            <li class="spacer">
-                <span class="control chart-span-one">
-                    <label class="radio">
-                        <input type="radio" name="type">
-                        Candle
-                    </label>
-                    <label type="radio">
-                        <input type="radio" name="type">
-                        Line
-                    </label>
-                </span>
-                <span class="control chart-span-one">
-                    <label class="radio">
-                        <input type="radio" name="timeframe">
-                        5m
-                    </label>
-                    <label type="radio">
-                        <input type="radio" name="timeframe">
-                        1d
-                    </label>
-                </span>
-            </li>
+            <li class="spacer has-text-centered">30 Day Daily Chart</li>
         </ul>
         <div id="chart"></div>
     </div>
@@ -102,7 +81,7 @@ export default {
   watch: {
     close: {
       handler() {
-        Plotly.plot("chart", [this.trace1], this.layout);
+        Plotly.update("chart", [this.trace1], this.layout);
       }
     }
   },
@@ -134,6 +113,6 @@ export default {
 
 .chart-span-one {
   display: inline-block;
-  width: 32%;
+  /* width: 32%; */
 }
 </style>
