@@ -1,4 +1,5 @@
 {
+  "plugins": ["transform-object-spread"],
   "presets": [
     ["env", { "modules": false }]
   ]
