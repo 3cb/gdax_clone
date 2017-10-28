@@ -1,10 +1,6 @@
 <template>
     <div id="container">
         <nav class="level info is-marginless is-paddingless">
-                <div class="level-left"></div>
-                <div class="level-right">
-                    <span><a><i class="fa fa-bars" aria-hidden="true"></i></a></span>
-                </div>
         </nav>
         <nav class="level info is-marginless is-paddingless">
             <span class="is-uppercase has-text-weight-semibold">Trade History</span>
