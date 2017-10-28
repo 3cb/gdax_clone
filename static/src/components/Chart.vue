@@ -83,20 +83,43 @@ export default {
       handler() {
         Plotly.update("chart", [this.trace1], this.layout);
       }
+    },
+    product: {
+      handler() {
+        this.changeChartProduct()
+      }
     }
   },
   mounted() {
-        axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
+        this.initializeChart()
+  },
+  methods: {
+    initializeChart() {
+      axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
         params: getParams(this.$store.state.chartInterval)
+      })
+      .then(response => {
+          this.$store.commit('setChartData', response.data)
+          Plotly.plot("chart", [this.trace1], this.layout);
+      })
+      .catch(error => {
+          console.log(error)
+      })
+    },
+    changeChartProduct() {
+      axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
+          params: getParams(this.$store.state.chartInterval)
         })
         .then(response => {
-            this.$store.commit('setChartData', response.data)
-            Plotly.plot("chart", [this.trace1], this.layout);
+          this.$store.commit('setChartData', response.data)
+          Plotly.update("chart", [this.trace1], this.layout)
         })
         .catch(error => {
-            console.log(error)
+          console.log(error)
         })
+    }
   }
+  
 };
 </script>
 
