@@ -26,9 +26,6 @@ export default {
     tickerDenom() {
       return this.$store.state.selected_denom
     },
-    sales() {
-      return this.$store.state.products[this.index].sales;
-    },
     trades() {
       return this.$store.state.products[this.index].trades
     }
