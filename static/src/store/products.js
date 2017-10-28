@@ -5,20 +5,17 @@ function getProducts(array) {
             id: i+1,
             name: array[i],
             deltaClass: null,
-            sales: [], // 
+            trades: [], // { change, class, price, side, size, time, trade_id }
             best_ask: null,
             best_bid: null,
             high_24h: null,
-            last_size: null,
             low_24h: null,
             open_24h: null,
             price: null,
             product_id: array[i].split('/').join('-'),
-            priceDelta24h: null,
+            priceDelta24h: 0.00,
             sequence: null,
-            side: null,
             trade_id: null,
-            type: 'ticker',
             volume_24h: null,
             volume_30d: null
         })

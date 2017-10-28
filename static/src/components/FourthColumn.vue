@@ -9,7 +9,7 @@
         <nav class="level info is-marginless is-paddingless">
             <span class="is-uppercase has-text-weight-semibold">Trade History</span>
         </nav>
-        <time-sales class="is-marginless is-paddingless" :data="sales" :denom="tickerDenom"></time-sales>
+        <time-sales class="is-marginless is-paddingless" :trades="trades" :denom="tickerDenom"></time-sales>
     </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
   computed: {
     index() {
       return _.findIndex(this.$store.state.products, o => {
-        return o.id === this.$store.state.selected_id;
+        return o.product_id === this.$store.state.selected_product;
       });
     },
     tickerDenom() {
@@ -32,6 +32,9 @@ export default {
     },
     sales() {
       return this.$store.state.products[this.index].sales;
+    },
+    trades() {
+      return this.$store.state.products[this.index].trades
     }
   },
   components: {

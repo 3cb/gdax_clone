@@ -5,7 +5,7 @@ function getParams(interval) {
         let arr = moment.utc().toISOString().split('T')
         let date = arr[0]
         return {
-            start: moment(date).subtract(30, 'days').toISOString(),
+            start: moment(date).subtract(53, 'days').toISOString(),
             end: moment(date).toISOString(),
             granularity: 86400
         }

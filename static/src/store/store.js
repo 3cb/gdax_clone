@@ -42,109 +42,80 @@ export default new Vuex.Store({
             var arr = _.split(state.selected_product, "-")
             state.selected_denom = arr[1]
         },
-        initProducts(state, ticker) {
+        updateTicker(state, ticker) {
             // find correct product
             var i = _.findIndex(state.products, (o) => {
                 return o.product_id === ticker.product_id
             })
 
-            // set values from ticker message
-            // =========== may use these variables later
-            // state.products[i].best_ask = ticker.best_ask
-            // state.products[i].best_bid = ticker.best_bid
-            // state.products[i].high_24h = ticker.high_24h
-            // state.products[i].low_24h = ticker.low_24h
-            state.products[i].open_24h = ticker.open_24h
-            state.products[i].price = ticker.price
-            state.products[i].priceDelta24h = ((parseFloat(ticker.price) - (parseFloat(ticker.open_24h))) / parseFloat(ticker.open_24h) * 100).toFixed(2)
-            state.products[i].sequence = ticker.sequence
-            state.products[i].volume_24h = ticker.volume_24h
-            // state.products[i].volume_30d = ticker.volume_30d
-
-            // update color of % delta element
-            if (ticker.price > ticker.open_24h) {
-                state.products[i].deltaClass = "has-text-success"
-            } else if (ticker.price < ticker.open_24h) {
-                state.products[i].deltaClass = "has-text-danger"
-            } else {
-                state.products[i].deltaClass = ""
-            }
-            // console.log(state.products[i])
-        },
-        addSale(state, sale) {
-            var i = _.findIndex(state.products, (o) => {
-                return o.product_id === sale.product_id
-            })
-            var x = _.clone(sale)
-            x.change = ''
-            x.class = ''
-
-            // add new sales
-            if (sale.sequence > state.products[i].sequence) {
-                // add new sale to begining of sales array and limit array to last 100 sales
-                state.products[i].sales.unshift(x)
-                if (state.products[i].sales.length > state.salesDepth) {
-                    state.products[i].sales.pop()
+            if (ticker.sequence > state.products[i].sequence) {
+                // only set price/priceDelta on intial ticker message (uses "matches" channel messages to update)
+                if (!ticker.time) {
+                    state.products[i].price = ticker.price
+                    state.products[i].priceDelta24h = ((parseFloat(ticker.price) - (parseFloat(ticker.open_24h))) / parseFloat(ticker.open_24h) * 100)
                 }
-
-                // =========== may use these variables later
-
-                // state.products[i].best_ask = x.best_ask
-                // state.products[i].best_bid = x.best_bid
-                // state.products[i].high_24h = x.high_24h
-                // state.products[i].low_24h = x.low_24h
-                // state.products[i].last_size = x.last_size
-                state.products[i].open_24h = x.open_24h
-                state.products[i].price = x.price
-                state.products[i].priceDelta24h = ((parseFloat(x.price) - (parseFloat(x.open_24h))) / parseFloat(x.open_24h) * 100).toFixed(2)
-                state.products[i].sequence = x.sequence
-                state.products[i].side = x.side
-                state.products[i].trade_id = x.trade_id
-                state.products[i].volume_24h = x.volume_24h
-                // state.products[i].volume_30d = x.volume_30d
+                
+                // set values from ticker message
+                state.products[i].best_ask = ticker.best_ask
+                state.products[i].best_bid = ticker.best_bid
+                state.products[i].high_24h = ticker.high_24h
+                state.products[i].low_24h = ticker.low_24h
+                state.products[i].open_24h = ticker.open_24h
+                state.products[i].sequence = ticker.sequence
+                state.products[i].volume_24h = ticker.volume_24h
+                state.products[i].volume_30d = ticker.volume_30d
 
                 // update color of % delta element
-                if (sale.price > sale.open_24h) {
+                if (ticker.price > ticker.open_24h) {
                     state.products[i].deltaClass = "has-text-success"
-                } else if (sale.price < sale.open_24h) {
+                } else if (ticker.price < ticker.open_24h) {
                     state.products[i].deltaClass = "has-text-danger"
                 } else {
                     state.products[i].deltaClass = ""
                 }
-
-            } else {
-                console.log("Out of Sequence")
-                // add new sale to array and sort by sequence number
-                state.products[i].sales = _.chain(state.products[i].sales)
-                                                .concat(x)
-                                                .orderBy((o) => {
-                                                    o.sequence
-                                                }, ['desc'])
-                                                .value()
-
-                if (state.products[i].sales.length > state.salesDepth) {
-                    state.products[i].sales.pop()
+            }
+        },
+        updatePriceTicker(state, { price, product_id, trade_id }) {
+            // find correct product
+            var index = _.findIndex(state.products, o => {
+                return o.product_id === product_id
+            })
+            // conditionally set price with most recent trade price
+            if (trade_id > state.products[index].trade_id) {
+                state.products[index].price = price
+                state.products[index].priceDelta24h = ((parseFloat(price) - (parseFloat(state.products[index].open_24h))) / parseFloat(state.products[index].open_24h) * 100)
+                state.products[index].trade_id = trade_id
+            }
+        },
+        initTrades(state, { data, product }) {
+            // find correct product
+            var index = _.findIndex(state.products, o => {
+                return o.product_id === product
+            })
+            // push most recent trade data into state.products[].trades[] and set display classes
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].side === 'sell') {
+                    state.products[index].trades.push({ ...data[i], change: '+', class: "sales-span has-text-right has-text-success" })
+                } else if (data[i].side === 'buy') {
+                    state.products[index].trades.push({ ...data[i], change: '-', class: "sales-span has-text-right has-text-danger" })
                 }
             }
 
-
-
-            var length = state.products[i].sales.length
-            state.products[i].sales[length - 1].change = '=' // set last value to no change
-            state.products[i].sales[length - 1].class = 'sales-span has-text-right'
-
-
-            for (let j = length - 2; j >= 0; j--) {
-                if (state.products[i].sales[j].price > state.products[i].sales[j + 1].price) {
-                    state.products[i].sales[j].change = '+'
-                    state.products[i].sales[j].class = 'sales-span has-text-right has-text-success'
-                } else if (state.products[i].sales[j].price < state.products[i].sales[j + 1].price) {
-                    state.products[i].sales[j].change = '-'
-                    state.products[i].sales[j].class = 'sales-span has-text-right has-text-danger'
-                } else {
-                    state.products[i].sales[j].change = '='
-                    state.products[i].sales[j].class = state.products[i].sales[j + 1].class
-                }
+            // conditionally set initial watchlist prices/priceDeltas with most recent trade
+            if (data[0].trade_id > state.products[index].trade_id) {
+                state.products[index].price = data[0].price
+                state.products[index].priceDelta24h = ((parseFloat(data[0].price) - (parseFloat(state.products[index].open_24h))) / parseFloat(state.products[index].open_24h) * 100)
+                state.products[index].trade_id = data[0].trade_id
+            }
+        },
+        addTrade(state, { trade, product }) {
+            var index = _.findIndex(state.products, o => {
+                return o.product_id === product
+            })
+            if (trade.side === "sell") {
+                state.products[index].trades.unshift({ ...trade, change: '+', class: 'sales-span has-text-right has-text-success' })
+            } else if (trade.side === "buy") {
+                state.products[index].trades.unshift({ ...trade, change: '-', class: 'sales-span has-text-right has-text-danger' })
             }
         },
         initBook(state, book) {

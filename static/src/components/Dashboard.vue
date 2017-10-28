@@ -23,6 +23,7 @@ import FourthColumn from "./FourthColumn.vue";
 import xs from "xstream";
 import axios from "axios";
 import _ from "lodash";
+import { getBTCUSD, getBTCEUR, getBTCGBP, getETHUSD, getETHBTC, getETHEUR, getLTCUSD, getLTCBTC, getLTCEUR } from '../lib/trades.js'
 
 export default {
   data() {
@@ -36,11 +37,9 @@ export default {
         }
       },
       // ============================================
-      initListener: {
+      tickerListener: {
         next(value) {
-          console.log(value);
-
-          store.commit("initProducts", value);
+          store.commit("updateTicker", value);
         },
         error(err) {
           console.log("Error from websocket - watchlistListener: ", err);
@@ -49,16 +48,25 @@ export default {
           console.log("Watchlist stream complete.");
         }
       },
-      salesListener: {
+      tradeListener: {
         next(value) {
-          // console.log(value);
-          store.commit("addSale", value);
+          store.commit('addTrade', {
+            trade: {
+              price: value.price,
+              side: value.side,
+              size: value.size,
+              time: value.time,
+              trade_id: value.trade_id
+            },
+            product: value.product_id
+          })
+          store.commit('updatePriceTicker', { price: value.price, product_id: value.product_id, trade_id: value.trade_id })
         },
         error(err) {
-          console.log("Error from websocket - historyListener: ", err);
+          console.log("Error from websocket - tradeListener: ", err)
         },
         complete() {
-          console.log("History channel complete.");
+          console.log("Trade stream complete.")
         }
       },
       bookInitListener: {
@@ -132,6 +140,20 @@ export default {
                     ]
                   },
                   {
+                    name: "matches",
+                    product_ids: [
+                      "BTC-USD",
+                      "BTC-EUR",
+                      "BTC-GBP",
+                      "ETH-USD",
+                      "ETH-BTC",
+                      "ETH-EUR",
+                      "LTC-USD",
+                      "LTC-BTC",
+                      "LTC-EUR"
+                    ]
+                  },
+                  {
                     name: "level2",
                     product_ids: ["BTC-USD"]
                   }
@@ -154,11 +176,11 @@ export default {
     main$() {
       return xs.createWithMemory(this.producer);
     },
-    init$() {
-      return xs.from(this.main$).filter(v => v.type === "ticker" && !v.time);
+    ticker$() {
+      return xs.from(this.main$).filter(v => v.type === "ticker")
     },
-    sales$() {
-      return xs.from(this.main$).filter(v => v.type === "ticker" && v.time);
+    trade$() {
+      return xs.from(this.main$).filter(v => v.type === "match")
     },
     bookInit$() {
       return xs.from(this.main$).filter(v => v.type === "snapshot");
@@ -176,12 +198,35 @@ export default {
     }
   },
   beforeMount() {
-    this.main$.addListener(this.mainListener);
-    this.init$.addListener(this.initListener);
-    this.sales$.addListener(this.salesListener);
+    this.getTrades()
+    // For debugging =========== Remove ======================
+    // this.main$.addListener(this.mainListener);
+    // =======================================================
+
+    this.ticker$.addListener(this.tickerListener);
+    this.trade$.addListener(this.tradeListener);
     this.bookInit$.addListener(this.bookInitListener);
     this.bookUpdate$.addListener(this.bookUpdateListener);
-    this.chart$.addListener(this.chartUpdateListener)
+    this.chart$.addListener(this.chartUpdateListener);
+  },
+  methods: {
+    getTrades() {
+      axios.all([getBTCUSD(), getBTCEUR(), getBTCGBP(), getETHUSD(), getETHBTC(), getETHEUR(), getLTCUSD(), getLTCBTC(), getLTCEUR()])
+      .then(axios.spread((btc_usd, btc_eur, btc_gbp, eth_usd, eth_btc, eth_eur, ltc_usd, ltc_btc, ltc_eur) => {
+        this.$store.commit('initTrades', { data: btc_usd.data, product: "BTC-USD" })
+        this.$store.commit('initTrades', { data: btc_eur.data, product: "BTC-EUR"})
+        this.$store.commit('initTrades', { data: btc_gbp.data, product: "BTC-GBP"})
+        this.$store.commit('initTrades', { data: eth_usd.data, product: "ETH-USD"})
+        this.$store.commit('initTrades', { data: eth_btc.data, product: "ETH-BTC"})
+        this.$store.commit('initTrades', { data: eth_eur.data, product: "ETH-EUR"})
+        this.$store.commit('initTrades', { data: ltc_usd.data, product: "LTC-USD"})
+        this.$store.commit('initTrades', { data: ltc_btc.data, product: "LTC-BTC"})
+        this.$store.commit('initTrades', { data: ltc_eur.data, product: "LTC-EUR"})
+      }))
+      .catch(error => {
+        console.log(error)
+      })
+    }
   },
   components: {
     FirstColumn,

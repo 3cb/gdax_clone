@@ -9,7 +9,7 @@
         </div>
         <div class="level-item has-text-centered">
             <div>
-                <p :class="deltaClass" class="has-text-weight-bold">{{ deltaSign }}{{ selectedProduct.priceDelta24h }} %</p>
+                <p :class="deltaClass" class="has-text-weight-bold">{{ deltaSign }}{{ selectedProduct.priceDelta24h.toFixed(2) }} %</p>
                 <p class="heading">24 Hour price</p>
             </div>
         </div>

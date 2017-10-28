@@ -5,15 +5,14 @@
             <span class="sales-span has-text-right">Price({{ denom }})</span>
             <span class="sales-span has-text-right">Time</span>
         </li>
-        <li v-for="(sale, index) in data" :key="sale.sequence">
+        <li v-for="(trade, index) in trades" :key="trade.trade_id">
             <a>
-                <span class="sales-span has-text-right">{{ sale.last_size }}</span>
-                <span :class="sale.class">{{ sale.price | decimals }}
-                    <span class="icon" v-if="sale.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
-                    <span class="icon" v-if="sale.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
-                    <span class="icon" v-if="sale.change === '='"><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
+                <span class="sales-span has-text-right">{{ trade.size }}</span>
+                <span :class="trade.class">{{ trade.price | decimals }}
+                    <span class="icon" v-if="trade.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
+                    <span class="icon" v-if="trade.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
                 </span>
-                <span class="sales-span has-text-right">{{ sale.time | formatDate }}</span>
+                <span class="sales-span has-text-right">{{ trade.time | formatDate }}</span>
             </a>
         </li>
     </ul>
@@ -23,7 +22,7 @@
 import { addCommas } from "../lib/numbers.js";
 
 export default {
-  props: ["data", "denom"],
+  props: ["trades", "denom"],
   filters: {
     decimals(price) {
       if (price < 1) {
