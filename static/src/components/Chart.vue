@@ -40,7 +40,7 @@ export default {
     volume() {
       return this.$store.state.volume;
     },
-    trace1() {
+    trace0() {
       return {
         type: "candlestick",
         xaxis: "x",
@@ -81,7 +81,7 @@ export default {
   watch: {
     close: {
       handler() {
-        Plotly.update("chart", [this.trace1], this.layout);
+        Plotly.update("chart", [this.trace0], this.layout);
       }
     },
     product: {
@@ -99,8 +99,9 @@ export default {
         params: getParams(this.$store.state.chartInterval)
       })
       .then(response => {
+        console.log(response.data)
           this.$store.commit('setChartData', response.data)
-          Plotly.plot("chart", [this.trace1], this.layout);
+          Plotly.plot("chart", [this.trace0], this.layout);
       })
       .catch(error => {
           console.log(error)
@@ -112,7 +113,7 @@ export default {
         })
         .then(response => {
           this.$store.commit('setChartData', response.data)
-          Plotly.update("chart", [this.trace1], this.layout)
+          Plotly.update("chart", [this.trace0], this.layout)
         })
         .catch(error => {
           console.log(error)
