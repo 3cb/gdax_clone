@@ -1,7 +1,7 @@
 <template>
     <div id="chart-cont">
         <ul>
-            <li class="spacer has-text-centered">30 Day Daily Chart</li>
+            <li class="spacer has-text-centered">{{ product }} {{ chartInterval }} Chart</li>
         </ul>
         <div id="chart"></div>
     </div>
@@ -16,11 +16,11 @@ export default {
     return {};
   },
   computed: {
-    chartData() {
-      return this.$store.state.chartData;
-    },
     product() {
-      return this.$store.state.selected_product;
+      return this.$store.state.products[this.$store.state.selected_id-1].name;
+    },
+    chartInterval() {
+      return this.$store.state.chartInterval
     },
     time() {
       return this.$store.state.time;
