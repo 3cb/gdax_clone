@@ -9,18 +9,17 @@ function getParams(interval) {
             end: moment(date).toISOString(),
             granularity: 86400
         }
-    } else if (interval === '5m') {
+    } else if (interval === '1m') {
         let arr = moment.utc().toISOString().split('T')
         let date = arr[0]
         return {
-            start: moment(date).subtract(1000, 'minutes').toISOString(),
+            start: moment(date).subtract(100, 'minutes').toISOString(),
             end: moment(date).toISOString(),
-            granularity: 300
+            granularity: 60
         }
     }
 }
 
 export {
-    getParams,
-    drawChart
+    getParams
 }
