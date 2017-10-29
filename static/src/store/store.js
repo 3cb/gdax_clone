@@ -21,7 +21,7 @@ export default new Vuex.Store({
             bids: [[0.00,0]]
         },
         bookConnected: false,
-        chartData: [],
+        // chartData: [],
         time: [],
         low: [],
         high: [],
@@ -128,6 +128,7 @@ export default new Vuex.Store({
            
         },
         setChartData(state, data) {
+            // initialize chart with data from http request
             for (var i = 0; i < data.length; i++) {
                 state.time[i] = moment.utc(data[i][0]*1000).local().toISOString().split('T')[0]
                 state.low[i] = data[i][1]
@@ -143,9 +144,11 @@ export default new Vuex.Store({
 
             if (update.price != state.close[0] && t === state.time[0]) {
                 // replace current price
+                // state.close[0] = update.price
                 state.close.shift()
                 state.close.unshift(update.price)
-                // check to set new high/low
+
+                // conditionally set new high/low
                 state.low[0] = update.price < state.low[0] ? update.price : state.low[0]
                 state.high[0] = update.price > state.high[0] ? update.price : state.high[0]
             } else if (t != state.time[0]) {
