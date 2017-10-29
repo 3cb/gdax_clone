@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h3 class="has-text-weight-semibold">Bitcoin</h3>
-        <watchlist-row :products="btcProducts"></watchlist-row>
-        <h3 class="has-text-weight-semibold">Ether</h3>
+        <ul><li class="has-text-weight-semibold spacer">Bitcoin</li></ul>
+        <watchlist-row :products="btcProducts" class=""></watchlist-row>
+        <ul><li class="has-text-weight-semibold spacer">Ether</li></ul>
         <watchlist-row :products="ethProducts"></watchlist-row>
-        <h3 class="has-text-weight-semibold">Litecoin</h3>
+        <ul><li class="has-text-weight-semibold spacer">Litecoin</li></ul>
         <watchlist-row :products="ltcProducts"></watchlist-row>
     </div>
 </template>

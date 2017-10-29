@@ -1,6 +1,6 @@
 <template>
     <ul>
-        <li v-for="product in products" :key="product.id">
+        <li v-for="product in products" :key="product.id" class="watchlist-margin">
             <a @click="changeProduct(product.id)">
                 <span class="watchlist-span-one has-text-left">{{ product.name }}</span>
                 <span class="watchlist-span-one has-text-right">
@@ -61,6 +61,11 @@ export default {
 .watchlist-span-one {
   display: inline-block;
   width: 27%;
+}
+
+.watchlist-margin {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 span.icon {
