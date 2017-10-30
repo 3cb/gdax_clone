@@ -14,6 +14,11 @@ export default {
 </script>
 
 <style>
+body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
 div {
   margin-bottom: -12x;
 }

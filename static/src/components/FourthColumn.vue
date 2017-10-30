@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div id="column4">
         <nav class="level info is-marginless is-paddingless">
         </nav>
         <nav class="level info is-marginless is-paddingless">
@@ -37,7 +37,10 @@ export default {
 </script>
 
 <style>
-#container {
+#column4 {
+  width: 100%;
   height: 100%;
+  overflow: hidden;
 }
+
 </style>
