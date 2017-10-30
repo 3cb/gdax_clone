@@ -7,9 +7,8 @@
         </li>
         <li is="book-row" v-for="level in asks" :level="level" :key="level[0]"></li>
         <li class="spacer">
-            <span class="book-span-one">{{ denom }} SPREAD</span>
-            <span class="book-span-one"></span>
-            <span class="book-span-one">{{ spread }}</span>
+            <span>{{ denom }} SPREAD</span>
+            <span class="book-span-one is-pulled-right">{{ spread }}</span>
         </li>
         <li is="book-row" v-for="level in bids" :level="level" :key="level[0]"></li>
     </ul>
