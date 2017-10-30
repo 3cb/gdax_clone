@@ -61,12 +61,17 @@ export default {
 .watchlist-span-one {
   display: inline-block;
   width: 27%;
+  margin-left: 5px;
 }
 
 .watchlist-margin {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/* .wl-spacer {
+  visibility: hidden;
+} */
 
 span.icon {
   display: inline-block;
