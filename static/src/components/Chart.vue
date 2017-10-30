@@ -1,8 +1,16 @@
 <template>
     <div id="chart-cont">
         <ul>
-            <li class="spacer has-text-centered">{{ product }} {{ chartInterval }} Chart</li>
+            <li class="spacer has-text-centered">{{ product }} {{ chartInterval }}</li>
         </ul>
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="button is-small">Daily</a>
+          </p>
+          <p class="control">
+            <a class="button is-small">1 minute</a>
+          </p>
+        </div>
         <div id="chart"></div>
     </div>
 </template>
@@ -59,20 +67,18 @@ export default {
       return {
         margin: {
           r: 10,
-          t: 30,
+          t: 5,
           b: 40,
           l: 35
         },
         showlegend: false,
         xaxis: {
           autorange: true,
-          domain: [0, 1],
-          rangeslider: {range: [this.time[30], this.time[0]]},
+          range: [this.time[30], this.time[0]],
           type: "date"
         },
         yaxis: {
           autorange: true,
-          domain: [0,1],
           type: "linear"
         }
       };
