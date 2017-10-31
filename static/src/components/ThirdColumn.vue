@@ -1,9 +1,9 @@
 <template>
-    <div id="cont3">
+    <div id="column3">
         <nav class="level info is-marginless is-paddingless">
           <div class="level-item has-text-centered">
             <div>
-              <p class="has-text-weight-bold has-text-info">{{ selectedProduct.name }}</p>
+              <p class="has-text-weight-bold has-text-primary">{{ selectedProduct.name }}</p>
               <p class="heading">Current Product</p>
             </div>
           </div>
@@ -82,8 +82,8 @@ export default {
 </script>
 
 <style>
-#cont3 {
+#column3 {
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 </style>
