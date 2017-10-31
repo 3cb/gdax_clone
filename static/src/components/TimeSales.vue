@@ -1,22 +1,23 @@
 <template>
     <div id="container">
       <ul>
-          <li class="spacer">
-              <span class="sales-span has-text-right">Trade Size</span>
-              <span class="sales-span has-text-right">Price({{ denom }})</span>
-              <span class="sales-span has-text-right">Time</span>
+          <li class="spacer ts-li">
+              <span class="ts-size">Trade Size</span>
+              <span class="ts-price-wrap">Price({{ denom }})</span>
+              <span class="ts-date has-text-right">Time</span>
           </li>
       </ul>
       <ul id="time-sales">
-          <li v-for="(trade, index) in trades" :key="trade.trade_id">
-              <a>
-                  <span class="sales-span has-text-right">{{ trade.size }}</span>
-                  <span :class="trade.class">{{ trade.price | decimals }}
-                      <span class="icon" v-if="trade.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
-                      <span class="icon" v-if="trade.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
-                  </span>
-                  <span class="sales-span has-text-right">{{ trade.time | formatDate }}</span>
-              </a>
+          <li v-for="(trade, index) in trades" :key="trade.trade_id" class="ts-li">
+              <span class="ts-size"><span>{{ trade.size }}</span></span>
+
+              <div class="ts-price-wrap">
+                <span :class="trade.class" class="ts-price">{{ trade.price | decimals }}</span>
+                <span class="icon" :class="trade.class" v-if="trade.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
+                <span class="icon" :class="trade.class" v-if="trade.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
+              </div>
+
+              <span class="ts-date has-text-right">{{ trade.time | formatDate }}</span>
           </li>
       </ul>
     </div>
@@ -44,6 +45,11 @@ export default {
 </script>
 
 <style>
+ul,
+li {
+  width: 100%;
+}
+
 #container {
   height: 100%;
   width: 100%;
@@ -54,8 +60,6 @@ export default {
 {
   width: 100%;
   height: 100%;
-  /* margin-right: -30px; */
-  /* padding-right: -20px; */
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -64,20 +68,36 @@ export default {
     width: 0px;
     background: transparent; /* make scrollbar transparent */
 }
-/* 
-::-moz-scrollbar {
-    width: 0px;
-    display: none;
-    background: transparent; /* make scrollbar transparent */
-/* } */
 
-ul,
-li {
-  width: 100%;
+.ts-li {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
 }
 
-.sales-span {
-  display: inline-block;
-  width: 30%;
+.ts-size {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  flex: 1 1 15%;
+}
+
+.ts-price-wrap {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  flex: 0 1 31%;
+}
+
+.ts-price {
+  flex-grow: 2;
+  flex-shrink: 0;
+  flex-basis: 89%;
+}
+
+.ts-date {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 31%;
 }
 </style>
