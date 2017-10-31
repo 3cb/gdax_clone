@@ -70,6 +70,7 @@ li {
 }
 
 .ts-li {
+  padding-right: 25px;
   display: inline-flex;
   flex-flow: row nowrap;
   justify-content: space-between;
