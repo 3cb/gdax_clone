@@ -1,21 +1,24 @@
 <template>
     <ul>
         <li v-for="product in products" :key="product.id" class="watchlist-margin">
-            <a @click="changeProduct(product.id)">
-                <span class="watchlist-span-one has-text-left">{{ product.name }}</span>
-                <span class="watchlist-span-one has-text-right">
-                    <span class="icon" v-if="product.product_id.split('-')[1] === 'USD'"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                    <span class="icon" v-if="product.product_id.split('-')[1] === 'EUR'"><i class="fa fa-eur" aria-hidden="true"></i></span>
-                    <span class="icon" v-if="product.product_id.split('-')[1] === 'GBP'"><i class="fa fa-gbp" aria-hidden="true"></i></span>
-                    <span class="icon" v-if="product.product_id.split('-')[1] === 'BTC'"><i class="fa fa-btc" aria-hidden="true"></i></span>
-                {{ product.price | decimals }}</span>
-                <span :class="product.deltaClass" class="watchlist-span-one has-text-right">{{ Math.abs(product.priceDelta24h).toFixed(2) }}%</span>
-                <span :class="product.deltaClass" class="icon" v-if="product.priceDelta24h > 0">
-                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                </span>
-                <span :class="product.deltaClass" class="icon" v-if="product.priceDelta24h < 0">
-                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                </span>
+            <a @click="changeProduct(product.id)" class="wl-a wl-li">
+              <div class="ws-pro-div has-text-left">{{ product.name }}</div>
+                <div class="wl-price">
+                  <span class="icon" v-if="product.product_id.split('-')[1] === 'USD'"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                  <span class="icon" v-if="product.product_id.split('-')[1] === 'EUR'"><i class="fa fa-eur" aria-hidden="true"></i></span>
+                  <span class="icon" v-if="product.product_id.split('-')[1] === 'GBP'"><i class="fa fa-gbp" aria-hidden="true"></i></span>
+                  <span class="icon" v-if="product.product_id.split('-')[1] === 'BTC'"><i class="fa fa-btc" aria-hidden="true"></i></span>
+                  <div class="ws-price-div has-text-right">{{ product.price | decimals }}</div>
+                </div>
+                <div class="wl-delta">
+                    <div :class="product.deltaClass" class="wl-delta-div has-text-right">{{ Math.abs(product.priceDelta24h).toFixed(2) }}%</div>
+                    <div :class="product.deltaClass" class="icon wl-arrow-div" v-if="product.priceDelta24h > 0">
+                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                    </div>
+                    <div :class="product.deltaClass" class="icon wl-arrow-div" v-if="product.priceDelta24h < 0">
+                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                    </div>
+                </div>
             </a>
         </li>
     </ul>
@@ -58,24 +61,52 @@ export default {
 </script>
 
 <style>
-.watchlist-span-one {
-  display: inline-block;
-  width: 27%;
-  margin-left: 5px;
-}
-
 .watchlist-margin {
-    margin-top: 5px;
-    margin-bottom: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
 }
 
-/* .wl-spacer {
-  visibility: hidden;
-} */
+.wl-a {
+  width: 100%;
+}
 
-span.icon {
-  display: inline-block;
-  width: 7%;
+.wl-li {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.wl-price {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+.wl-delta {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.ws-pro-div {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 10%;
+}
+
+.ws-price-div {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 0%;
+}
+
+.ws-delta-div {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 35%;
 }
 
 a {
@@ -83,11 +114,11 @@ a {
 }
 
 a:hover {
-  color: hsl(171, 100%, 41%);
+  color: hsl(0, 0%, 100%);
 }
 
 li:hover {
-  /* color: hsl(171, 100%, 41%); */
   background-color: hsl(0, 0%, 21%);
+  /* background-color: hsl(171, 100%, 41%); */
 }
 </style>
