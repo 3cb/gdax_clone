@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="col-cont">
         <nav class="level info is-paddingless is-marginless">
             <span class="level-item">
                     <a href="https://www.gdax.com/"><strong>GDAX</strong></a>
@@ -23,5 +23,9 @@ export default {
 </script>
 
 <style>
-
+#col-cont {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 </style>

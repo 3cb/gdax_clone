@@ -12,10 +12,10 @@
                 </div>
                 <div class="wl-delta">
                     <div :class="product.deltaClass" class="wl-delta-div has-text-right">{{ Math.abs(product.priceDelta24h).toFixed(2) }}%</div>
-                    <div :class="product.deltaClass" class="icon wl-arrow-div" v-if="product.priceDelta24h > 0">
+                    <div :class="product.deltaClass" class="icon" v-if="product.priceDelta24h > 0">
                         <i class="fa fa-arrow-up" aria-hidden="true"></i>
                     </div>
-                    <div :class="product.deltaClass" class="icon wl-arrow-div" v-if="product.priceDelta24h < 0">
+                    <div :class="product.deltaClass" class="icon" v-if="product.priceDelta24h < 0">
                         <i class="fa fa-arrow-down" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -77,11 +77,18 @@ export default {
   justify-content: space-between;
 }
 
+.ws-pro-div {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 10%;
+}
+
 .wl-price {
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-end;
+  flex-basis: 37%
 }
 
 .wl-delta {
@@ -89,12 +96,7 @@ export default {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
-}
-
-.ws-pro-div {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 10%;
+  flex-basis: 28%;
 }
 
 .ws-price-div {
