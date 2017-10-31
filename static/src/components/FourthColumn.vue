@@ -5,7 +5,7 @@
         <nav class="level info is-marginless is-paddingless">
             <span class="is-uppercase has-text-weight-semibold">Trade History</span>
         </nav>
-        <time-sales class="is-marginless is-paddingless" :trades="trades" :denom="tickerDenom"></time-sales>
+        <time-sales :trades="trades" :denom="tickerDenom"></time-sales>
     </div>
 </template>
 
