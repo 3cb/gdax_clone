@@ -1,20 +1,24 @@
 <template>
-    <div class="columns">
-        <div class="column" :class="wlClass">
-            <first-column></first-column>
-        </div>
-        <div class="column" :class="obClass">
-            <second-column></second-column>
-        </div>
-        <div v-if="winSize > 1700" class="column">
-            <third-column></third-column>
-        </div>
-        <div class="column" :class="tsClass">
-            <fourth-column></fourth-column>
-        </div>
-        <div v-if="winSize <= 1700 && winSize > 800" class="column is-12">
-            <third-column></third-column>
-        </div>
+    <div>
+      <div class="columns">
+          <div class="column" :class="wlClass">
+              <first-column></first-column>
+          </div>
+          <div class="column" :class="obClass">
+              <second-column></second-column>
+          </div>
+          <div v-if="winSize > 1700" class="column">
+              <third-column></third-column>
+          </div>
+          <div class="column" :class="tsClass">
+              <fourth-column></fourth-column>
+          </div>
+      </div>
+      <div class="columns">
+          <div v-if="winSize <= 1700 && winSize > 800" class="column is-12">
+              <third-column></third-column>
+          </div>
+      </div>
     </div>
 </template>
 
@@ -127,7 +131,7 @@ export default {
       return this.winSize > 1700 ? 'is-2' : 'is-4'
     },
     obClass() {
-      return this.winSize > 1700 ? 'is-3' : 'is-4'
+      return this.winSize > 1700 ? 'is-2' : 'is-4'
     },
     tsClass() {
       return this.winSize > 1700 ? 'is-3' : 'is-4'
