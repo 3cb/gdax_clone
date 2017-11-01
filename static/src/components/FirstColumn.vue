@@ -2,7 +2,7 @@
     <div id="col-cont">
         <nav class="level info is-paddingless is-marginless">
             <span class="level-item">
-                    <a href="https://www.gdax.com/"><strong>GDAX</strong></a>
+                    <a href="https://www.gdax.com/"><strong>GDAX_clone</strong></a>
             </span>
         </nav>
         <nav class="level info is-marginless is-paddingless">
