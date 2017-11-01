@@ -14,6 +14,7 @@
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
     "vue": "^2.4.4",
+    "vue-simple-spinner": "^1.2.8",
     "vuex": "^3.0.0",
     "xstream": "^11.0.0"
   },
