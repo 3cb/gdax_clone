@@ -51,7 +51,7 @@ li {
 }
 
 #container {
-  height: 100%;
+  height: calc(100vh - 100px);
   width: 100%;
   overflow: hidden;
 }
@@ -64,7 +64,7 @@ li {
   overflow-x: hidden;
 }
 
-::-webkit-scrollbar {
+#time-sales::-webkit-scrollbar {
     width: 0px;
     background: transparent; /* make scrollbar transparent */
 }
