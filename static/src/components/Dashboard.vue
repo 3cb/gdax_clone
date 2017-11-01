@@ -1,16 +1,19 @@
 <template>
     <div class="columns">
-        <div class="column is-2">
+        <div class="column" :class="wlClass">
             <first-column></first-column>
         </div>
-        <div class="column is-2">
+        <div class="column" :class="obClass">
             <second-column></second-column>
         </div>
-        <div class="column">
+        <div v-if="winSize > 1700" class="column">
             <third-column></third-column>
         </div>
-        <div class="column is-3">
+        <div class="column" :class="tsClass">
             <fourth-column></fourth-column>
+        </div>
+        <div v-if="winSize <= 1700 && winSize > 800" class="column is-12">
+            <third-column></third-column>
         </div>
     </div>
 </template>
@@ -109,6 +112,27 @@ export default {
     };
   },
   computed: {
+    winSize() {
+      return this.$store.state.win.size
+    },
+
+    // ===========================================================================
+    // Dynamically set column for classes based on data from window size stream
+    // ===========================================================================
+    // *wlClass -> left column
+    // *obClass -> column second from left
+    // *tsClass -> far right column
+    // ===========================================================================
+    wlClass() {
+      return this.winSize > 1700 ? 'is-2' : 'is-4'
+    },
+    obClass() {
+      return this.winSize > 1700 ? 'is-3' : 'is-4'
+    },
+    tsClass() {
+      return this.winSize > 1700 ? 'is-3' : 'is-4'
+    },
+
     selected_product() {
       return this.$store.state.selected_product
     },

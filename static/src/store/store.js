@@ -9,6 +9,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        win: {
+            size: null
+        },
         products: getProducts(['BTC/USD', 'BTC/EUR', 'BTC/GBP', 'ETH/USD', 'ETH/BTC', 'ETH/EUR', 'LTC/USD', 'LTC/BTC', 'LTC/EUR']),
         selected_id: 1,
         selected_product: 'BTC-USD',
@@ -27,9 +30,13 @@ export default new Vuex.Store({
         open: [],
         close: [],
         volume: [],
-        chartInterval: '1d'
+        chartType: 'candle',
+        chartInterval: '1m'
     },
     mutations: {
+        setWin(state, width) {
+            state.win.size = width;
+        },
         toggleWS(state) {
             state.wsConnected = !state.wsConnected
         },
@@ -65,9 +72,9 @@ export default new Vuex.Store({
                 state.products[i].volume_30d = ticker.volume_30d
 
                 // update color of % delta element
-                if (ticker.price > ticker.open_24h) {
+                if (parseFloat(ticker.price) > parseFloat(ticker.open_24h)) {
                     state.products[i].deltaClass = "has-text-success"
-                } else if (ticker.price < ticker.open_24h) {
+                } else if (parseFloat(ticker.price) < parseFloat(ticker.open_24h)) {
                     state.products[i].deltaClass = "has-text-danger"
                 } else {
                     state.products[i].deltaClass = ""
@@ -126,6 +133,12 @@ export default new Vuex.Store({
         updateBook(state, update) {
            
         },
+        setChartInterval(state, interval) {
+            state.chartInterval = interval
+        },
+        setChartType(state, type) {
+            state.chartType = type
+        },
         setChartData(state, data) {
             // initialize chart with data from http request
             if (state.chartInterval === '1d') {
@@ -137,17 +150,18 @@ export default new Vuex.Store({
                     state.close[i] = data[i][4]
                     state.volume[i] = data[i][5]
                 }
-                console.log(state.time[0])
+                // console.log(state.time[0])
             } else if (state.chartInterval === '1m') {
                 for ( var i = 0; i < data.length; i++) {
                     state.time[i] = moment.utc(data[i][0]*1000).local().toISOString()
+                    console.log(state.time[i])
                     state.low[i] = data[i][1]
                     state.high[i] = data[i][2]
                     state.open[i] = data[i][3]
                     state.close[i] = data[i][4]
                     state.volume[i] = data[i][5]
                 }
-                console.log(state.time[0])
+                // console.log(state.time[0])
             }
         },
         updateChartData(state, update) {
@@ -157,7 +171,7 @@ export default new Vuex.Store({
             } else if (state.chartInterval === '1m') {
                 var t = moment.utc(update.time).local().toISOString().split(':')[1]
             }
-            console.log(t)
+            // console.log(t)
 
             switch(state.interval) {
                 case '1d':
