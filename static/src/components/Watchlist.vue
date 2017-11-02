@@ -1,10 +1,10 @@
 <template>
     <div>
-        <ul><li class="has-text-primary spacer is-uppercase">Bitcoin</li></ul>
+        <ul><li class="has-text-primary spacer is-uppercase has-text-weight-semibold">Bitcoin</li></ul>
         <watchlist-row :products="btcProducts"></watchlist-row>
-        <ul><li class="has-text-primary spacer is-uppercase">Ether</li></ul>
+        <ul><li class="has-text-primary spacer is-uppercase has-text-weight-semibold">Ether</li></ul>
         <watchlist-row :products="ethProducts"></watchlist-row>
-        <ul><li class="has-text-primary spacer is-uppercase">Litecoin</li></ul>
+        <ul><li class="has-text-primary spacer is-uppercase has-text-weight-semibold">Litecoin</li></ul>
         <watchlist-row :products="ltcProducts"></watchlist-row>
     </div>
 </template>
