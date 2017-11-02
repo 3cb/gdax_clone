@@ -1,8 +1,10 @@
 <template>
     <div id="chart-cont">
-      <!-- {{ winSize }} -->
         <ul>
-            <li class="spacer has-text-centered">{{ product }}</li>
+          <li class="spacer has-text-centered has-text-weight-semibold">
+            <span class="" v-show="chartInterval === '1m'">1 Minute</span>
+            <span class="" v-show="chartInterval === '1d'">Daily</span>
+          </li>
         </ul>
         <div class="chart-btn-anchor">
           <div id="chart"></div>
