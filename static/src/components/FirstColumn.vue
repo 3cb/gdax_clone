@@ -2,7 +2,7 @@
     <div id="col-cont">
         <nav class="level info is-paddingless is-marginless">
             <span class="level-item">
-                    <a href="https://www.gdax.com/"><strong>GDAX_clone</strong></a>
+                <a id="" @click="openGDAX"><strong>GDAX_clone</strong></a>
             </span>
         </nav>
         <nav class="level info is-marginless is-paddingless">
@@ -18,6 +18,11 @@ import Watchlist from "./Watchlist.vue";
 export default {
   components: {
     Watchlist
+  },
+  methods: {
+      openGDAX() {
+          window.open('https://www.gdax.com/trade/BTC-USD')
+      }
   }
 };
 </script>
@@ -27,5 +32,6 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    padding-left: .75rem;
 }
 </style>
