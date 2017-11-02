@@ -10,7 +10,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         win: {
-            size: null
+            width: null,
+            height: null
         },
         products: getProducts(['BTC/USD', 'BTC/EUR', 'BTC/GBP', 'ETH/USD', 'ETH/BTC', 'ETH/EUR', 'LTC/USD', 'LTC/BTC', 'LTC/EUR']),
         selected_id: 1,
@@ -31,11 +32,11 @@ export default new Vuex.Store({
         close: [],
         volume: [],
         chartType: 'candle',
-        chartInterval: '1m'
+        chartInterval: '1d'
     },
     mutations: {
-        setWin(state, width) {
-            state.win.size = width;
+        setWin(state, win) {
+            state.win = win;
         },
         toggleWS(state) {
             state.wsConnected = !state.wsConnected
@@ -154,7 +155,6 @@ export default new Vuex.Store({
             } else if (state.chartInterval === '1m') {
                 for ( var i = 0; i < data.length; i++) {
                     state.time[i] = moment.utc(data[i][0]*1000).local().toISOString()
-                    console.log(state.time[i])
                     state.low[i] = data[i][1]
                     state.high[i] = data[i][2]
                     state.open[i] = data[i][3]

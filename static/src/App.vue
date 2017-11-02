@@ -23,7 +23,6 @@ export default {
       windowListener: {
         next: (value) => {
           this.$store.commit('setWin', value)
-          console.log(value)
         },
         err: (err) => {
           console.log("Error listening to window size: ", err)
@@ -33,14 +32,19 @@ export default {
   },
   computed: {
     window$() {
-      return xs.createWithMemory(this.winProducer).map(v => v.target.innerWidth)
+      return xs.createWithMemory(this.winProducer).map(v => {
+        return {
+          width: v.target.innerWidth,
+          height: v.target.innerHeight
+        }
+      })
     },
     type() {
       return this.$store.state.win.type
     }
   },
   mounted() {
-    this.$store.commit('setWin', window.innerWidth)
+    this.$store.commit('setWin', { width: window.innerWidth, height: window.innerHeight })
     this.window$.addListener(this.windowListener)
   },
   components: {
@@ -56,7 +60,7 @@ body {
 }
 
 div {
-  margin-bottom: -12px;
+  margin-bottom: -10px;
 }
 
 .dashboard {

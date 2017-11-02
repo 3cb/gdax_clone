@@ -1,34 +1,51 @@
 <template>
     <div id="chart-cont">
+      <!-- {{ winSize }} -->
         <ul>
-            <li class="spacer has-text-centered">{{ product }} {{ chartInterval }}</li>
+            <li class="spacer has-text-centered">{{ product }}</li>
         </ul>
-        <div class="field is-grouped">
-          <p class="control">
-            <a class="button is-small">Daily</a>
-          </p>
-          <p class="control">
-            <a class="button is-small">1 minute</a>
-          </p>
+        <div class="chart-btn-anchor">
+          <div id="chart"></div>
+          <div class="field is-grouped chart-btn">
+            <p class="control">
+              <a class="button is-small is-primary" @click="setInterval('1d')" :disabled="dailyDisabled">Daily</a>
+              <a class="button is-small is-primary" @click="setInterval('1m')" :disabled="!dailyDisabled">1 Minute</a>
+            </p>
+            <p class="control">
+                <a class="button is-small is-primary" @click="setType(candle)" :disabled="candleDisabled">Candle</a>
+                <a class="button is-small is-primary" @click="setType(line)" :disabled="!candleDisabled">Line</a>
+            </p>
+          </div>
         </div>
-        <div id="chart"></div>
+        <spinner class="spinner is-overlay" v-show="chartLoading" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
     </div>
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import { getParams } from '../lib/chart.js'
 import axios from 'axios'
 
 export default {
   data() {
-    return {};
+    return {
+      dailyDisabled: true,
+      candleDisabled: true,
+      chartLoading: false
+    };
   },
   computed: {
     product() {
       return this.$store.state.products[this.$store.state.selected_id-1].name;
     },
+    winSize() {
+      return this.$store.state.win
+    },
+    chartType() {
+      return this.$store.state.chartType;
+    },
     chartInterval() {
-      return this.$store.state.chartInterval
+      return this.$store.state.chartInterval;
     },
     time() {
       return this.$store.state.time;
@@ -67,7 +84,7 @@ export default {
       return {
         margin: {
           r: 10,
-          t: 5,
+          t: 20,
           b: 40,
           l: 35
         },
@@ -85,6 +102,13 @@ export default {
     }
   },
   watch: {
+    winSize: {
+      deep: true,
+      handler() {
+        Plotly.purge("chart");
+        Plotly.plot("chart", [this.trace0], this.layout);
+      }
+    },
     close: {
       handler() {
         Plotly.update("chart", [this.trace0], this.layout);
@@ -92,7 +116,12 @@ export default {
     },
     product: {
       handler() {
-        this.changeChartProduct()
+        this.rerenderChart()
+      }
+    },
+    chartInterval: {
+      handler() {
+        this.rerenderChart()
       }
     }
   },
@@ -100,7 +129,12 @@ export default {
         this.initializeChart()
   },
   methods: {
+    setType(type) {
+      this.candleDisabled = !this.candleDisabled
+      this.$store.commit('setChartType', type)
+    },
     initializeChart() {
+      this.chartLoading = true
       axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
         params: getParams(this.$store.state.chartInterval)
       })
@@ -108,41 +142,63 @@ export default {
         console.log(response.data)
           this.$store.commit('setChartData', response.data)
           Plotly.plot("chart", [this.trace0], this.layout);
+          this.chartLoading = false
       })
       .catch(error => {
-          console.log(error)
+        console.log(error)
       })
     },
-    changeChartProduct() {
+    setInterval(interval) {
+      this.dailyDisabled = !this.dailyDisabled
+      this.$store.commit('setChartInterval', interval)
+    },
+    rerenderChart() {
+      // this.chartLoading = true
       axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
           params: getParams(this.$store.state.chartInterval)
         })
         .then(response => {
           this.$store.commit('setChartData', response.data)
           Plotly.update("chart", [this.trace0], this.layout)
+          // this.chartLoading = false
         })
         .catch(error => {
           console.log(error)
         })
     }
+  },
+  components: {
+    Spinner
   }
-  
 };
 </script>
 
 <style>
 #chart-cont {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 100px);
+  position: relative;
 }
 
 #chart {
   width: 100%;
-  height: 50%;
+  height: 95%;
 }
 
-.chart-span-one {
-  display: inline-block;
-  /* width: 32%; */
+.chart-btn-anchor {
+  position: relative;
+  height: 100%;
+}
+
+.chart-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.spinner {
+  position: absolute;
+  top: 35%;
 }
 </style>
