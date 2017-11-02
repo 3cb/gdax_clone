@@ -31,8 +31,8 @@ export default new Vuex.Store({
         open: [],
         close: [],
         volume: [],
-        chartType: 'candle',
-        chartInterval: '1d',
+        chartType: 'candle',    // either 'candle' or 'line'
+        chartInterval: '1d',    // either '1d' or '1m'
         chartDepth: 50
     },
     mutations: {

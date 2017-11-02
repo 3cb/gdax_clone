@@ -1,7 +1,7 @@
 <template>
     <div id="chart-cont">
         <ul>
-          <li class="spacer has-text-centered has-text-weight-semibold">
+          <li class="spacer has-text-centered has-text-weight-semibold has-text-primary">
             <span class="" v-show="chartInterval === '1m'">1 Minute</span>
             <span class="" v-show="chartInterval === '1d'">Daily</span>
           </li>
@@ -14,8 +14,8 @@
               <button class="button is-small is-primary" @click="setInterval('1m')" :disabled="!dailyDisabled">1 Minute</button>
             </p>
             <p class="control">
-                <button class="button is-small is-primary" @click="setType(candle)" :disabled="candleDisabled">Candle</button>
-                <button class="button is-small is-primary" @click="setType(line)" :disabled="!candleDisabled">Line</button>
+                <button class="button is-small is-primary" @click="setType('candle')" :disabled="candleDisabled">Candle</button>
+                <button class="button is-small is-primary" @click="setType('line')" :disabled="!candleDisabled">Line</button>
             </p>
           </div>
         </div>
@@ -74,13 +74,23 @@ export default {
         yaxis: "y",
         decreasing: { line: { color: "hsl(348, 100%, 61%)" } },
         increasing: { line: { color: "hsl(141, 71%, 48%)" } },
-        line: { color: "hsl(0, 0%, 48%)" },
+        // line: { color: "hsl(0, 0%, 48%)" },
         x: this.time,
         low: this.low,
         high: this.high,
         open: this.open,
         close: this.close
       };
+    },
+    trace1() {
+      return {
+        type: 'scatter',
+        // mode: 'lines',
+        x: this.time,
+        y: this.close,
+        line: { color: "hsl(171, 100%, 41%)" }
+
+      }
     },
     layout() {
       return {
@@ -93,7 +103,7 @@ export default {
         showlegend: false,
         xaxis: {
           autorange: true,
-          range: [this.time[30], this.time[0]],
+          // range: [this.time[30], this.time[0]],
           type: "date"
         },
         yaxis: {
@@ -124,6 +134,18 @@ export default {
     chartInterval: {
       handler() {
         this.rerenderChart()
+      }
+    },
+    chartType: {
+      handler(type) {
+        let trace = type === 'line' ? this.trace1 : this.trace0
+        // if (type === 'line') {
+        //   var trace = this.trace1
+        // } else {
+        //   var trace = this.trace0
+        // }
+        Plotly.deleteTraces("chart", 0)
+        Plotly.addTraces("chart", [trace], 0)
       }
     }
   },
