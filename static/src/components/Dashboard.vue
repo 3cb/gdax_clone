@@ -34,7 +34,6 @@ import { getBTCUSD, getBTCEUR, getBTCGBP, getETHUSD, getETHBTC, getETHEUR, getLT
 
 export default {
   data() {
-    var store = this.$store;
     return {
       ws: null,
       // === For debugging -- Remove ================
@@ -45,20 +44,20 @@ export default {
       },
       // ============================================
       tickerListener: {
-        next(value) {
+        next: (value) => {
           // console.log(value)
-          store.commit("updateTicker", value);
+          this.$store.commit("updateTicker", value);
         },
-        error(err) {
+        error: (err) => {
           console.log("Error from websocket - watchlistListener: ", err);
         },
-        complete() {
+        complete: () => {
           console.log("Watchlist stream complete.");
         }
       },
       tradeListener: {
-        next(value) {
-          store.commit('addTrade', {
+        next: (value) => {
+          this.$store.commit('addTrade', {
             trade: {
               price: value.price,
               side: value.side,
@@ -68,48 +67,48 @@ export default {
             },
             product: value.product_id
           })
-          store.commit('updatePriceTicker', { price: value.price, product_id: value.product_id, trade_id: value.trade_id })
+          this.$store.commit('updatePriceTicker', { price: value.price, product_id: value.product_id, trade_id: value.trade_id })
         },
-        error(err) {
+        error: (err) => {
           console.log("Error from websocket - tradeListener: ", err)
         },
-        complete() {
+        complete: () => {
           console.log("Trade stream complete.")
         }
       },
       bookInitListener: {
-        next(value) {
+        next: (value) => {
           // console.log(value);
-          store.commit("initBook", value);
+          this.$store.commit("initBook", value);
         },
-        error(err) {
+        error: (err) => {
           console.log("Error from websocket - bookInitListener: ", err);
         },
-        complete() {
+        complete: () => {
           console.log("Book initialization stream complete.");
         }
       },
       bookUpdateListener: {
-        next(value) {
+        next: (value) => {
           // console.log(value);
-          // store.commit("updateBook", value);
+          // this.$store.commit("updateBook", value);
         },
-        error(err) {
+        error: (err) => {
           console.log("Error from websocket - bookUpdateListener: ", err);
         },
-        complete() {
+        complete: () => {
           console.log("Book update stream complete.");
         }
       },
       chartUpdateListener: {
-        next(value) {
-          // console.log(value)
-          store.commit('updateChartData', value)
+        next: (value) => {
+          console.log(value)
+          this.$store.commit('updateChartData', value)
         },
-        error(err) {
+        error: (err) => {
           console.log("Error from websocket - chartUpdateListener: ", err)
         },
-        complete() {
+        complete: () => {
           console.log("Chart update stream complete")
         }
       }
@@ -226,9 +225,8 @@ export default {
         .map(v => v.changes[0]);
     },
     chart$() {
-      var product = this.selected_product
       return xs.from(this.trade$)
-        .filter(v => v.product_id === product)
+        .filter(v => v.product_id === this.selected_product)
     }
   },
   beforeMount() {
