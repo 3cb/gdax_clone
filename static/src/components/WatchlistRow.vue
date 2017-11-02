@@ -2,7 +2,7 @@
     <ul>
         <li v-for="product in products" :key="product.id" class="watchlist-margin">
             <a @click="changeProduct(product.id)" class="wl-a wl-li">
-              <div class="ws-pro-div has-text-left">{{ product.name }}</div>
+                <div class="ws-pro-div has-text-left">{{ product.name }}</div>
                 <div class="wl-price">
                   <span class="icon" v-if="product.product_id.split('-')[1] === 'USD'"><i class="fa fa-usd" aria-hidden="true"></i></span>
                   <span class="icon" v-if="product.product_id.split('-')[1] === 'EUR'"><i class="fa fa-eur" aria-hidden="true"></i></span>
@@ -68,6 +68,7 @@ export default {
 
 .wl-a {
   width: 100%;
+  padding-left: 7px;
 }
 
 .wl-li {
@@ -95,8 +96,8 @@ export default {
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
-  flex-basis: 28%;
+  justify-content: flex-end;
+  flex-basis: 30%;
 }
 
 .ws-price-div {
@@ -121,6 +122,5 @@ a:hover {
 
 li:hover {
   background-color: hsl(0, 0%, 21%);
-  /* background-color: hsl(171, 100%, 41%); */
 }
 </style>
