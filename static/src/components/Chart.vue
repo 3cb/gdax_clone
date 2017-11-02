@@ -8,12 +8,12 @@
           <div id="chart"></div>
           <div class="field is-grouped chart-btn">
             <p class="control">
-              <a class="button is-small is-primary" @click="setInterval('1d')" :disabled="dailyDisabled">Daily</a>
-              <a class="button is-small is-primary" @click="setInterval('1m')" :disabled="!dailyDisabled">1 Minute</a>
+              <button class="button is-small is-primary" @click="setInterval('1d')" :disabled="dailyDisabled">Daily</button>
+              <button class="button is-small is-primary" @click="setInterval('1m')" :disabled="!dailyDisabled">1 Minute</button>
             </p>
             <p class="control">
-                <a class="button is-small is-primary" @click="setType(candle)" :disabled="candleDisabled">Candle</a>
-                <a class="button is-small is-primary" @click="setType(line)" :disabled="!candleDisabled">Line</a>
+                <button class="button is-small is-primary" @click="setType(candle)" :disabled="candleDisabled">Candle</button>
+                <button class="button is-small is-primary" @click="setType(line)" :disabled="!candleDisabled">Line</button>
             </p>
           </div>
         </div>
