@@ -33,7 +33,7 @@ export default new Vuex.Store({
         volume: [],
         chartType: 'candle',
         chartInterval: '1d',
-        chartDepth: 40
+        chartDepth: 50
     },
     mutations: {
         setWin(state, win) {
@@ -143,28 +143,14 @@ export default new Vuex.Store({
         },
         setChartData(state, data) {
             // initialize chart with data from http request
-            // if (state.chartInterval === '1d') {
-                // for (var i = 0; i < data.length; i++) {
-                for ( let i = 0; i < state.chartDepth; i++) {
-                    state.time[i] = moment.unix(data[i][0]).format()
-                    state.low[i] = data[i][1]
-                    state.high[i] = data[i][2]
-                    state.open[i] = data[i][3]
-                    state.close[i] = data[i][4]
-                    state.volume[i] = data[i][5]
-                }
-                console.log(state.time[0])
-            // } else if (state.chartInterval === '1m') {
-            //     for ( var i = 0; i < data.length; i++) {
-            //         state.time[i] = moment.unix(data[i][0]).format()
-            //         state.low[i] = data[i][1]
-            //         state.high[i] = data[i][2]
-            //         state.open[i] = data[i][3]
-            //         state.close[i] = data[i][4]
-            //         state.volume[i] = data[i][5]
-            //     }
-                // console.log(state.time[0])
-            // }
+            for ( let i = 0; i < state.chartDepth; i++) {
+                state.time[i] = moment.unix(data[i][0]).format()
+                state.low[i] = data[i][1]
+                state.high[i] = data[i][2]
+                state.open[i] = data[i][3]
+                state.close[i] = data[i][4]
+                state.volume[i] = data[i][5]
+            }
         },
         updateChartData(state, update) {
             // check date of sale to determine if new bar needs to be added to chart
