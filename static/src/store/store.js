@@ -144,7 +144,7 @@ export default new Vuex.Store({
             // initialize chart with data from http request
             if (state.chartInterval === '1d') {
                 for (var i = 0; i < data.length; i++) {
-                    state.time[i] = moment.utc(data[i][0]*1000).local().toISOString()
+                    state.time[i] = moment.unix(data[i][0]).format()
                     state.low[i] = data[i][1]
                     state.high[i] = data[i][2]
                     state.open[i] = data[i][3]
@@ -154,7 +154,7 @@ export default new Vuex.Store({
                 // console.log(state.time[0])
             } else if (state.chartInterval === '1m') {
                 for ( var i = 0; i < data.length; i++) {
-                    state.time[i] = moment.utc(data[i][0]*1000).local().toISOString()
+                    state.time[i] = moment.unix(data[i][0]).format()
                     state.low[i] = data[i][1]
                     state.high[i] = data[i][2]
                     state.open[i] = data[i][3]
