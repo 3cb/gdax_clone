@@ -7,7 +7,7 @@
           <div class="column" :class="obClass">
               <second-column></second-column>
           </div>
-          <div v-if="winSize > 1700" class="column">
+          <div v-if="winSize.width > 1700" class="column">
               <third-column></third-column>
           </div>
           <div class="column" :class="tsClass">
@@ -15,7 +15,7 @@
           </div>
       </div>
       <div class="columns">
-          <div v-if="winSize <= 1700 && winSize > 800" class="column is-12">
+          <div v-if="winSize.width <= 1700 && winSize.width > 800" class="column is-12">
               <third-column></third-column>
           </div>
       </div>
@@ -46,7 +46,7 @@ export default {
       // ============================================
       tickerListener: {
         next(value) {
-          console.log(value)
+          // console.log(value)
           store.commit("updateTicker", value);
         },
         error(err) {
@@ -103,7 +103,6 @@ export default {
       },
       chartUpdateListener: {
         next(value) {
-          // console.log(value)
           store.commit('updateChartData', value)
         },
         error(err) {
@@ -117,7 +116,7 @@ export default {
   },
   computed: {
     winSize() {
-      return this.$store.state.win.size
+      return this.$store.state.win
     },
 
     // ===========================================================================
@@ -128,13 +127,13 @@ export default {
     // *tsClass -> far right column
     // ===========================================================================
     wlClass() {
-      return this.winSize > 1700 ? 'is-2' : 'is-4'
+      return this.winSize.width > 1700 ? 'is-2' : 'is-4'
     },
     obClass() {
-      return this.winSize > 1700 ? 'is-2' : 'is-4'
+      return this.winSize.width > 1700 ? 'is-2' : 'is-4'
     },
     tsClass() {
-      return this.winSize > 1700 ? 'is-3' : 'is-4'
+      return this.winSize.width > 1700 ? 'is-3' : 'is-4'
     },
 
     selected_product() {
