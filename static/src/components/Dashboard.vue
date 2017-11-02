@@ -14,7 +14,7 @@
               <fourth-column></fourth-column>
           </div>
       </div>
-      <div class="columns">
+      <div class="columns" :class="lcClass">
           <div v-if="winSize.width <= 1700 && winSize.width > 800" class="column is-12">
               <third-column></third-column>
           </div>
@@ -103,6 +103,7 @@ export default {
       },
       chartUpdateListener: {
         next(value) {
+          // console.log(value)
           store.commit('updateChartData', value)
         },
         error(err) {
@@ -125,6 +126,7 @@ export default {
     // *wlClass -> left column
     // *obClass -> column second from left
     // *tsClass -> far right column
+    // *lcClass -> lower chart column for winSIze <= 1700
     // ===========================================================================
     wlClass() {
       return this.winSize.width > 1700 ? 'is-2' : 'is-4'
@@ -134,6 +136,9 @@ export default {
     },
     tsClass() {
       return this.winSize.width > 1700 ? 'is-3' : 'is-4'
+    },
+    lcClass() {
+      return this.winSize > 1700 ? '' : 'lower-chart'
     },
 
     selected_product() {
@@ -267,5 +272,8 @@ export default {
 </script>
 
 <style>
-
+.lower-chart {
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
 </style>
