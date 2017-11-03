@@ -1,13 +1,14 @@
 <template>
     <div id="container">
       <ul>
-          <li class="spacer ts-li">
+          <li class="spacer ts-li has-text-primary has-text-weight-semibold">
               <span class="ts-size">Trade Size</span>
               <span class="ts-price-wrap">Price({{ denom }})</span>
               <span class="ts-date has-text-right">Time</span>
           </li>
       </ul>
       <ul id="time-sales">
+        <transition-group name="ts">
           <li v-for="(trade, index) in trades" :key="trade.trade_id" class="ts-li">
               <span class="ts-size"><span>{{ trade.size }}</span></span>
 
@@ -19,12 +20,15 @@
 
               <span class="ts-date has-text-right">{{ trade.time | formatDate }}</span>
           </li>
+        </transition-group>
       </ul>
     </div>
 </template>
 
 <script>
 import { addCommas } from "../lib/numbers.js";
+import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   props: ["trades", "denom"],
@@ -38,7 +42,11 @@ export default {
     },
     formatDate(value) {
       var date = new Date(value);
-      return date.toLocaleTimeString();
+      let x = moment(date).format().split('T')[1].split('-');
+      return _.chain(x)
+              .dropRight(1)
+              .join(':')
+              .value()
     }
   }
 };
@@ -100,5 +108,12 @@ li {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 31%;
+}
+
+.ts-enter-active {
+  transition: all .5s;
+}
+.ts-enter {
+  opacity: 0;
 }
 </style>
