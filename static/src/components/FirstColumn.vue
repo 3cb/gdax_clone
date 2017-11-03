@@ -1,6 +1,6 @@
 <template>
     <div id="col-cont">
-        <nav class="level info is-paddingless is-marginless">
+        <nav id="col1-header" class="level info is-paddingless is-marginless">
             <span class="level-item is-size-5">
                 <span class="icon">
                     <a @click="openRepo"><i class="fa fa-github" aria-hidden="true"></i></a>
@@ -39,5 +39,10 @@ export default {
     height: 100%;
     overflow: hidden;
     padding-left: .75rem;
+}
+
+/* #col-cont */
+#col1-header a:hover {
+    color: hsl(171, 100%, 41%);
 }
 </style>

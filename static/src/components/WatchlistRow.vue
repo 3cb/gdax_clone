@@ -1,6 +1,6 @@
 <template>
-    <ul>
-        <li v-for="product in products" :key="product.id" class="watchlist-margin">
+    <ul id="wl-detail">
+        <li v-for="product in classedProducts" :key="product.id" class="watchlist-margin" :class="product.class">
             <a @click="changeProduct(product.id)" class="wl-a wl-li">
                 <div class="ws-pro-div has-text-left">{{ product.name }}</div>
                 <div class="wl-price">
@@ -36,6 +36,20 @@ export default {
       } else {
         return addCommas(parseFloat(price).toFixed(2));
       }
+    }
+  },
+  computed: {
+    selectedProduct() {
+      return this.$store.state.selected_product;
+    },
+    classedProducts() {
+      return this.products.map(v => {
+        if (v.product_id === this.selectedProduct) {
+          return { ...v, class: "highlight-row" };
+        } else {
+          return { ...v, class: "" };
+        }
+      });
     }
   },
   methods: {
@@ -89,7 +103,7 @@ export default {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-end;
-  flex-basis: 37%
+  flex-basis: 37%;
 }
 
 .wl-delta {
@@ -120,7 +134,16 @@ a:hover {
   color: hsl(0, 0%, 100%);
 }
 
-li:hover {
-  background-color: hsl(0, 0%, 21%);
+#wl-detail li:hover {
+  background-color: hsl(0, 0%, 29%);
+}
+
+.highlight-row {
+  background-color: hsl(0, 0%, 29%);
+  
+}
+
+.highlight-row a {
+  color: hsl(0, 0%, 100%);
 }
 </style>
