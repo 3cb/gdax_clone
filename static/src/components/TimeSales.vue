@@ -110,10 +110,14 @@ li {
   flex-basis: 31%;
 }
 
+/* new trade animation */
 .ts-enter-active {
-  transition: all .5s;
+  /* background: hsl(141, 71%, 90%); */
+  transition: all .3s;
 }
 .ts-enter {
   opacity: 0;
+  /* background: white; */
+
 }
 </style>
