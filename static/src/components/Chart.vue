@@ -74,7 +74,6 @@ export default {
         yaxis: "y",
         decreasing: { line: { color: "hsl(348, 100%, 61%)" } },
         increasing: { line: { color: "hsl(141, 71%, 48%)" } },
-        // line: { color: "hsl(0, 0%, 48%)" },
         x: this.time,
         low: this.low,
         high: this.high,
@@ -85,7 +84,7 @@ export default {
     trace1() {
       return {
         type: 'scatter',
-        // mode: 'lines',
+        mode: 'lines',
         x: this.time,
         y: this.close,
         line: { color: "hsl(171, 100%, 41%)" }
@@ -103,7 +102,6 @@ export default {
         showlegend: false,
         xaxis: {
           autorange: true,
-          // range: [this.time[30], this.time[0]],
           type: "date"
         },
         yaxis: {
@@ -115,7 +113,6 @@ export default {
   },
   watch: {
     winSize: {
-      deep: true,
       handler() {
         Plotly.purge("chart");
         Plotly.plot("chart", [this.trace0], this.layout);
@@ -139,11 +136,6 @@ export default {
     chartType: {
       handler(type) {
         let trace = type === 'line' ? this.trace1 : this.trace0
-        // if (type === 'line') {
-        //   var trace = this.trace1
-        // } else {
-        //   var trace = this.trace0
-        // }
         Plotly.deleteTraces("chart", 0)
         Plotly.addTraces("chart", [trace], 0)
       }

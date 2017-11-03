@@ -144,48 +144,68 @@ export default new Vuex.Store({
         setChartData(state, data) {
             // initialize chart with data from http request
             for ( let i = 0; i < state.chartDepth; i++) {
-                state.time[i] = moment.unix(data[i][0]).format()
+                // state.time[i] = moment.unix(data[i][0]).add(1, 'days').format()
+                state.time[i] = moment.unix(data[i][0]).toISOString()
                 state.low[i] = data[i][1]
                 state.high[i] = data[i][2]
                 state.open[i] = data[i][3]
                 state.close[i] = data[i][4]
                 state.volume[i] = data[i][5]
             }
+            console.log(state.time)
         },
         updateChartData(state, update) {
             // check date of sale to determine if new bar needs to be added to chart
-            if (state.chartInterval === '1d') {
-                var t = moment.utc(update.time).local().toISOString().split('T')[0]
-            } else if (state.chartInterval === '1m') {
-                var t = moment.utc(update.time).local().toISOString().split(':')[1]
-            }
-            // console.log(t)
+            var t = moment(update.time).toISOString()
+            console.log(t)
 
-            switch(state.interval) {
+            switch(state.chartInterval) {
                 case '1d':
-                    if (update.price != state.close[0] && t === state.time[0]) {
+                    if (update.price != state.close[0] && t.split('T')[0].split('-')[2] === state.time[0].split('T')[0].split('-')[2]) {
                         // replace current price
-                        // state.close[0] = update.price
                         state.close.shift()
                         state.close.unshift(update.price)
                         
                         // conditionally set new high/low
                         state.low[0] = update.price < state.low[0] ? update.price : state.low[0]
                         state.high[0] = update.price > state.high[0] ? update.price : state.high[0]
-                    } else if (t != state.time[0]) {
+                    } else if (t.split('T')[0].split('-')[2] != state.time[0].split('T')[0].split('-')[2]) {
                         // add new bar to dataset
-                        state.close.unshift(update.price)
-                        state.low.unshift(update.price)
-                        state.high.unshift(update.price)
-                        state.open.unshift(update.price)
-                        state.time.unshift(t)
                         state.time.pop()
+                        state.time.unshift(t)
+                        state.low.pop()
+                        state.low.unshift(update.price)
+                        state.high.pop()
+                        state.high.unshift(update.price)
+                        state.open.pop()
+                        state.open.unshift(update.price)
+                        state.close.pop()
+                        state.close.unshift(update.price)
                     }
                     break
                 case '1m':
-                    if (update.price != state.close[0] && t === state.time[0].split(':')[1].join(':')) {
+                    if (update.price != state.close[0] && t.split('T')[1].split(':')[1] === state.time[0].split('T')[1].split(':')[1]) {
+                        // replace current price
+                        state.close.shift()
+                        state.close.unshift(update.price)
 
+                        // conditionally set new high/low
+                        state.low[0] = update.price < state.low[0] ? update.price : state.low[0]
+                        state.high[0] = update.price > state.high[0] ? update.price : state.high[0]
+                    } else if (t.split('T')[1].split(':')[1] != state.time[0].split('T')[1].split(':')[1]) {
+                         // add new bar to dataset
+                         state.time.pop()
+                         state.time.unshift(t)
+                         state.low.pop()
+                         state.low.unshift(update.price)
+                         state.high.pop()
+                         state.high.unshift(update.price)
+                         state.open.pop()
+                         state.open.unshift(update.price)
+                         state.close.pop()
+                         state.close.unshift(update.price)
                     }
+                    break
             }
         }
     }
