@@ -1,0 +1,42 @@
+@-webkit-keyframes highlight-fade {
+    0% {
+        background: hsl(141, 71%, 48%);
+    }
+    100% {
+        background: white;
+    }
+}
+
+@-moz-keyframes highlight-fade {
+    0% {
+        background: hsl(141, 71%, 48%);
+    }
+    100% {
+        background: white;
+    }
+}
+
+@-ms-keyframes highlight-fade {
+    0% {
+        background: hsl(141, 71%, 48%);
+    }
+    100% {
+        background: white;
+    }
+}
+
+@keyframes highlight-fade {
+    0% {
+        background: hsl(141, 71%, 85%);
+    }
+    100% {
+        background: white;
+    }
+}
+
+.highlight {
+    -webkit-animation: highlight-fade .4s ease-out;
+    -moz-animation: highlight-fade .4s ease-out;
+    -o-animation: highlight-fade .4s ease-out;
+    animation: highlight-fade .4s ease-out;
+}
