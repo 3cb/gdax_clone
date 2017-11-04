@@ -17,14 +17,21 @@ export default new Vuex.Store({
         selected_id: 1,
         selected_product: 'BTC-USD',
         selected_denom: 'USD',
-        salesDepth: 35,
+        salesDepth: 50,
+
+        // websocket variables
         ws: null,
         wsConnected: false,
+
+        // order book variables
         book: {
             asks: [[0.00,0]],
             bids: [[0.00,0]]
         },
+        bookDepth: 17,
         bookConnected: false,
+
+        // chart data
         time: [],
         low: [],
         high: [],
@@ -144,20 +151,17 @@ export default new Vuex.Store({
         setChartData(state, data) {
             // initialize chart with data from http request
             for ( let i = 0; i < state.chartDepth; i++) {
-                // state.time[i] = moment.unix(data[i][0]).add(1, 'days').format()
-                state.time[i] = moment.unix(data[i][0]).toISOString()
+                state.time[i] = state.chartInterval === '1d' ? moment.unix(data[i][0]).toISOString() : moment.unix(data[i][0]).format().slice(0, -6)
                 state.low[i] = data[i][1]
                 state.high[i] = data[i][2]
                 state.open[i] = data[i][3]
                 state.close[i] = data[i][4]
                 state.volume[i] = data[i][5]
             }
-            console.log(state.time)
         },
         updateChartData(state, update) {
             // check date of sale to determine if new bar needs to be added to chart
-            var t = moment(update.time).toISOString()
-            console.log(t)
+            var t = state.chartInterval === '1d' ? moment(update.time).toISOString() : moment(update.time).format().slice(0, -6)
 
             switch(state.chartInterval) {
                 case '1d':
