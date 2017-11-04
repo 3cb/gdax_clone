@@ -3,9 +3,9 @@
         <nav id="col1-header" class="level info is-paddingless is-marginless">
             <span class="level-item is-size-5">
                 <span class="icon">
-                    <a @click="openRepo"><i class="fa fa-github" aria-hidden="true"></i></a>
+                    <a href="https://github.com/3cb/gdax_clone" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
                 </span>
-                <a id="" @click="openGDAX"><strong>GDAX_clone</strong></a>
+                <a href="https://www.gdax.com/trade/BTC-USD" target="_blank"><strong>GDAX_clone</strong></a>
             </span>
         </nav>
         <nav class="level info is-marginless is-paddingless">
@@ -21,14 +21,6 @@ import Watchlist from "./Watchlist.vue";
 export default {
   components: {
     Watchlist
-  },
-  methods: {
-      openGDAX() {
-          window.open('https://www.gdax.com/trade/BTC-USD')
-      },
-      openRepo() {
-          window.open('https://github.com/3cb/gdax_clone')
-      }
   }
 };
 </script>
