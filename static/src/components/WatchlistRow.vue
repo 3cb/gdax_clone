@@ -57,10 +57,11 @@ export default {
       this.$store.state.ws.send(
         JSON.stringify({
           type: "unsubscribe",
-          product_ids: [this.$store.selected_product],
+          product_ids: [this.$store.state.selected_product],
           channels: ["level2"]
         })
       );
+      this.$store.commit('clearBook');
       this.$store.commit("updateProduct", id);
       this.$store.state.ws.send(
         JSON.stringify({
