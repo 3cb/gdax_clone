@@ -124,23 +124,57 @@ export default new Vuex.Store({
             }
         },
         addTrade(state, { trade, product }) {
-            var index = _.findIndex(state.products, o => {
-                return o.product_id === product
-            })
+            var index = _.findIndex(state.products, o => { return o.product_id === product })
             if (trade.side === "sell") {
                 state.products[index].trades.unshift({ ...trade, change: '+', class: 'sales-span has-text-right has-text-success' })
             } else if (trade.side === "buy") {
                 state.products[index].trades.unshift({ ...trade, change: '-', class: 'sales-span has-text-right has-text-danger' })
             }
         },
-        initBook(state, book) {
+        clearBook(state) {
             state.book = {
-                asks: book.asks,
-                bids: book.bids
+                asks: [[0.00, 0]],
+                bids: [[0.00, 0]]
             }
         },
-        updateBook(state, update) {
-           
+        initBook(state, book) {
+            state.book = {
+                asks: _.chain(book.asks)
+                            .map(v => {
+                                return [ parseFloat(v[0]).toFixed(2), v[1] ]
+                            })
+                            .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                            .value(),
+                bids: _.chain(book.bids)
+                            .map(v => {
+                                return [parseFloat(v[0]).toFixed(2), v[1]]
+                            })
+                            .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                            .value()
+            }
+            console.log("init", state.book)
+        },
+        updateBook(state, { side, price, vol }) {
+            // find correct price
+            var i = _.findIndex(state.book[side], a => { return parseFloat(a[0]).toFixed(2) === parseFloat(price).toFixed(2) })
+            // console.log(i)
+
+
+            if (i === -1) {
+                // console.log(vol)
+                state.book[side] = _.concat(state.book[side], [[price, vol]])
+                state.book[side] = _.orderBy(state.book[side], [a => { return parseFloat(a[0]) }], ['desc'])
+            } else {
+                if (vol != '0') {
+                    let arr = state.book[side]
+                    arr[i] = [ parseFloat(price).toFixed(2), vol ]
+                    
+                } else {
+                    _.pullAt(state.book[side], [i])
+                }
+            }
+            // console.log("update", state.book)
+            
         },
         setChartInterval(state, interval) {
             state.chartInterval = interval
