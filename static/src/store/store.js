@@ -25,19 +25,22 @@ export default new Vuex.Store({
 
         // order book variables
         book: {
-            asks: [[0.00,0]],
+            asks: [[0.00,0]], // [[price level, market size]]
             bids: [[0.00,0]]
         },
         bookDepth: 22,
         bookConnected: false,
 
-        // chart data
+        // chart data -- newest to oldest
         time: [],
         low: [],
         high: [],
         open: [],
         close: [],
         volume: [],
+        dailyDisabled: true,
+        candleDisabled: true,
+        chartLoading: false,
         chartType: 'candle',    // either 'candle' or 'line'
         chartInterval: '1d',    // either '1d' or '1m'
         chartDepth: 50
@@ -157,11 +160,8 @@ export default new Vuex.Store({
         updateBook(state, { side, price, vol }) {
             // find correct price
             var i = _.findIndex(state.book[side], a => { return parseFloat(a[0]).toFixed(2) === parseFloat(price).toFixed(2) })
-            // console.log(i)
-
 
             if (i === -1) {
-                // console.log(vol)
                 state.book[side] = _.concat(state.book[side], [[price, vol]])
                 state.book[side] = _.orderBy(state.book[side], [a => { return parseFloat(a[0]) }], ['desc'])
             } else {
@@ -173,14 +173,24 @@ export default new Vuex.Store({
                     _.pullAt(state.book[side], [i])
                 }
             }
-            // console.log("update", state.book)
-            
         },
+
+
         setChartInterval(state, interval) {
             state.chartInterval = interval
         },
         setChartType(state, type) {
             state.chartType = type
+        },
+        toggleChartBtn(state, button) {
+            if (button === 'candle') {
+                state.candleDisabled = !state.candleDisabled
+            } else if (button === 'daily') {
+                state.dailyDisabled = !state.dailyDisabled
+            }
+        },
+        toggleChartLoad(state) {
+            state.chartLoading = !state.chartLoading
         },
         setChartData(state, data) {
             // initialize chart with data from http request
