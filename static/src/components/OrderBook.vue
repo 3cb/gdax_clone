@@ -62,17 +62,13 @@ export default {
   width: 100%;
   height: calc(100vh - 100px);
   overflow: hidden;
-  /* z-index: 0; */
 }
 
 #order-book {
   position: relative;
   width: 100%;
   height: 100%;
-  /* margin-right: -30px; */
-  /* padding-right: -20px; */
-  /* overflow-y: scroll; */
-  overflow-x: hidden;
+  overflow: hidden;
   -ms-overflow-style: none;
 }
 #order-book::-webkit-scrollbar {
@@ -100,9 +96,14 @@ export default {
   overflow: hidden;
   padding-bottom: 8px;
 }
+#ob-bids {
+  overflow: hidden;
+}
 
 .spacer {
-  border-style: groove;
+  border-style: solid;
+  border-color: #4a4a4a;
+  /* border-color: black; */
   border-width: 1px 0px 1px 0px;
 }
 

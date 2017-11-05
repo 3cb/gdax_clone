@@ -2,7 +2,7 @@
     <li>
         <span class="book-span-one"></span>
         <span class="book-span-one">{{ level[1] | bookSize }}</span>
-        <span class="book-span-one">{{ level[0] | decimals }}</span>
+        <span class="book-span-one" :class="color">{{ level[0] | decimals }}</span>
     </li>
 </template>
 
@@ -11,7 +11,7 @@ import { addCommas } from '../lib/numbers.js'
 
 
 export default {
-  props: ["level"],
+  props: ["level", "color"],
   filters: {
       decimals(price) {
       if (price < 1) {
