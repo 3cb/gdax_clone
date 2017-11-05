@@ -29,14 +29,16 @@ import { getParams } from '../lib/chart.js'
 import axios from 'axios'
 
 export default {
-  data() {
-    return {
-      dailyDisabled: true,
-      candleDisabled: true,
-      chartLoading: false
-    };
-  },
   computed: {
+    dailyDisabled() {
+      return this.$store.state.dailyDisabled
+    },
+    candleDisabled() {
+      return this.$store.state.candleDisabled
+    },
+    chartLoading() {
+      return this.$store.state.chartLoading
+    },
     product() {
       return this.$store.state.products[this.$store.state.selected_id-1].name;
     },
@@ -66,6 +68,9 @@ export default {
     },
     volume() {
       return this.$store.state.volume;
+    },
+    trace() {
+      return this.chartType === 'line' ? this.trace1 : this.trace0
     },
     trace0() {
       return {
@@ -115,12 +120,12 @@ export default {
     winSize: {
       handler() {
         Plotly.purge("chart");
-        Plotly.plot("chart", [this.trace0], this.layout);
+        Plotly.plot("chart", [this.trace], this.layout);
       }
     },
     close: {
       handler() {
-        Plotly.update("chart", [this.trace0], this.layout);
+        Plotly.update("chart", [this.trace], this.layout);
       }
     },
     product: {
@@ -134,10 +139,9 @@ export default {
       }
     },
     chartType: {
-      handler(type) {
-        let trace = type === 'line' ? this.trace1 : this.trace0
-        Plotly.deleteTraces("chart", 0)
-        Plotly.addTraces("chart", [trace], 0)
+      handler() {
+        Plotly.purge("chart");
+        Plotly.plot("chart", [this.trace], this.layout);
       }
     }
   },
@@ -146,34 +150,36 @@ export default {
   },
   methods: {
     setType(type) {
-      this.candleDisabled = !this.candleDisabled
+      this.$store.commit('toggleChartBtn', 'candle')
       this.$store.commit('setChartType', type)
     },
+    setInterval(interval) {
+      this.$store.commit('toggleChartBtn', 'daily')
+      this.$store.commit('setChartInterval', interval)
+    },
     initializeChart() {
-      this.chartLoading = true
+      this.$store.commit('toggleChartLoad')
       axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
         params: getParams(this.$store.state.chartInterval)
       })
       .then(response => {
           this.$store.commit('setChartData', response.data)
-          Plotly.plot("chart", [this.trace0], this.layout);
-          this.chartLoading = false
+          Plotly.plot("chart", [this.trace], this.layout);
+          this.$store.commit('toggleChartLoad')
       })
       .catch(error => {
         console.log(error)
       })
     },
-    setInterval(interval) {
-      this.dailyDisabled = !this.dailyDisabled
-      this.$store.commit('setChartInterval', interval)
-    },
     rerenderChart() {
+      this.$store.commit('toggleChartLoad')
       axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
           params: getParams(this.$store.state.chartInterval)
         })
         .then(response => {
           this.$store.commit('setChartData', response.data)
-          Plotly.update("chart", [this.trace0], this.layout)
+          this.$store.commit('toggleChartLoad')
+          Plotly.update("chart", [this.trace], this.layout)
         })
         .catch(error => {
           console.log(error)
