@@ -155,7 +155,6 @@ export default {
         params: getParams(this.$store.state.chartInterval)
       })
       .then(response => {
-        console.log(response.data)
           this.$store.commit('setChartData', response.data)
           Plotly.plot("chart", [this.trace0], this.layout);
           this.chartLoading = false
