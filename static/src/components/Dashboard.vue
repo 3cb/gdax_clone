@@ -36,20 +36,12 @@ export default {
   data() {
     return {
       ws: null,
-      // === For debugging -- Remove ================
-      mainListener: {
-        next(value) {
-          // console.log(value)
-        }
-      },
-      // ============================================
       tickerListener: {
         next: (value) => {
-          // console.log(value)
           this.$store.commit("updateTicker", value);
         },
         error: (err) => {
-          console.log("Error from websocket - watchlistListener: ", err);
+          console.error("Error from websocket - watchlistListener: ", err);
         },
         complete: () => {
           console.log("Watchlist stream complete.");
@@ -67,10 +59,14 @@ export default {
             },
             product: value.product_id
           })
-          this.$store.commit('updatePriceTicker', { price: value.price, product_id: value.product_id, trade_id: value.trade_id })
+          this.$store.commit('updatePriceTicker', {
+              price: value.price,
+              product_id: value.product_id,
+              trade_id: value.trade_id
+            })
         },
         error: (err) => {
-          console.log("Error from websocket - tradeListener: ", err)
+          console.error("Error from websocket - tradeListener: ", err)
         },
         complete: () => {
           console.log("Trade stream complete.")
@@ -78,11 +74,11 @@ export default {
       },
       bookInitListener: {
         next: (value) => {
-          console.log(value);
+          // console.log(value);
           this.$store.commit("initBook", value);
         },
         error: (err) => {
-          console.log("Error from websocket - bookInitListener: ", err);
+          console.error("Error from websocket - bookInitListener: ", err);
         },
         complete: () => {
           console.log("Book initialization stream complete.");
@@ -98,7 +94,7 @@ export default {
           });
         },
         error: (err) => {
-          console.log("Error from websocket - bookUpdateListener: ", err);
+          console.error("Error from websocket - bookUpdateListener: ", err);
         },
         complete: () => {
           console.log("Book update stream complete.");
@@ -106,11 +102,10 @@ export default {
       },
       chartUpdateListener: {
         next: (value) => {
-          // console.log(value)
           this.$store.commit('updateChartData', value)
         },
         error: (err) => {
-          console.log("Error from websocket - chartUpdateListener: ", err)
+          console.error("Error from websocket - chartUpdateListener: ", err)
         },
         complete: () => {
           console.log("Chart update stream complete")
