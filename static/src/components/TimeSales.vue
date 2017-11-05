@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div id="ts-container">
       <ul>
           <li class="spacer ts-li has-text-primary has-text-weight-semibold">
               <span class="ts-size">Trade Size</span>
@@ -63,7 +63,8 @@ li {
   width: 100%;
 }
 
-#container {
+#ts-container {
+  position:relative;
   height: calc(100vh - 100px);
   width: 100%;
   overflow: hidden;
