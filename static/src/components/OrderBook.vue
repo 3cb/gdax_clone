@@ -108,7 +108,7 @@ export default {
 
 /* order book animations */
 .ob-anim-move {
-  transition: .5s;
+  transition: .4s;
 }
 .ob-anim-leave-active {
   background-color: hsl(0, 0%, 65%);
