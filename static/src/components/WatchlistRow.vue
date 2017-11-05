@@ -135,11 +135,11 @@ a:hover {
 }
 
 #wl-detail li:hover {
-  background-color: hsl(0, 0%, 29%);
+  background-color: hsl(0, 0%, 35%);
 }
 
 .highlight-row {
-  background-color: hsl(0, 0%, 29%);
+  background-color: hsl(0, 0%, 35%);
   
 }
 
