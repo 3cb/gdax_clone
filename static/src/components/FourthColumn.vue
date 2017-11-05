@@ -1,7 +1,7 @@
 <template>
     <div id="column4">
         <nav class="level info is-marginless is-paddingless">
-          <div class="level-item has-text-centered" v-if="winSize.width <= 1700">
+          <div class="level-item has-text-centered" v-if="winSize.width <= 1600 && winSize.width > 769">
             <div>
                 <p class="has-text-weight-bold">{{ currentPrice | decimals }} {{ tickerDenom }}</p>
                 <p class="heading">Last trade price</p>

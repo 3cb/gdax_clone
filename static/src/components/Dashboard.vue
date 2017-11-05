@@ -7,7 +7,7 @@
           <div class="column" :class="obClass">
               <second-column></second-column>
           </div>
-          <div v-if="winSize.width > 1700" class="column">
+          <div v-if="winSize.width > 1600" class="column">
               <third-column></third-column>
           </div>
           <div class="column" :class="tsClass">
@@ -15,7 +15,7 @@
           </div>
       </div>
       <div class="columns" :class="lcClass">
-          <div v-if="winSize.width <= 1700 && winSize.width > 800" class="column is-12">
+          <div v-if="winSize.width <= 1600 && winSize.width > 800" class="column is-12">
               <third-column></third-column>
           </div>
       </div>
@@ -78,7 +78,7 @@ export default {
       },
       bookInitListener: {
         next: (value) => {
-          // console.log(value);
+          console.log(value);
           this.$store.commit("initBook", value);
         },
         error: (err) => {
@@ -91,7 +91,11 @@ export default {
       bookUpdateListener: {
         next: (value) => {
           // console.log(value);
-          // this.$store.commit("updateBook", value);
+          this.$store.commit("updateBook", {
+            side: value[0] === 'buy' ? 'bids' : 'asks',
+            price: value[1],
+            vol: value[2]
+          });
         },
         error: (err) => {
           console.log("Error from websocket - bookUpdateListener: ", err);
@@ -102,7 +106,7 @@ export default {
       },
       chartUpdateListener: {
         next: (value) => {
-          console.log(value)
+          // console.log(value)
           this.$store.commit('updateChartData', value)
         },
         error: (err) => {
@@ -120,7 +124,7 @@ export default {
     },
 
     // ===========================================================================
-    // Dynamically set column for classes based on data from window size stream
+    // Dynamically set column classes based on data from window size stream
     // ===========================================================================
     // *wlClass -> left column
     // *obClass -> column second from left
@@ -128,16 +132,16 @@ export default {
     // *lcClass -> lower chart column for winSIze <= 1700
     // ===========================================================================
     wlClass() {
-      return this.winSize.width > 1700 ? 'is-2' : 'is-4'
+      return this.winSize.width > 1600 ? 'is-2' : 'is-4'
     },
     obClass() {
-      return this.winSize.width > 1700 ? 'is-2' : 'is-4'
+      return this.winSize.width > 1600 ? 'is-2' : 'is-4'
     },
     tsClass() {
-      return this.winSize.width > 1700 ? 'is-3' : 'is-4'
+      return this.winSize.width > 1600 ? 'is-3' : 'is-4'
     },
     lcClass() {
-      return this.winSize > 1700 ? '' : 'lower-chart'
+      return this.winSize > 1600 ? '' : 'lower-chart'
     },
 
     selected_product() {
@@ -149,7 +153,7 @@ export default {
     producer() {
       var store = this.$store;
       return {
-        start(listener) {
+        start: (listener) => {
           store.state.ws = new WebSocket("wss://ws-feed.gdax.com");
           var sock = store.state.ws;
           store.state.ws.onopen = event => {

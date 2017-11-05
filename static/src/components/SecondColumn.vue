@@ -1,7 +1,7 @@
 <template>
     <div id="column2">
         <nav class="level info is-marginless">
-        <div class="level-item has-text-centered" v-if="winSize.width <= 1700">
+        <div class="level-item has-text-centered" v-if="winSize.width <= 1600 && winSize.width > 769">
             <div>
               <p class="has-text-weight-bold has-text-primary">{{ selectedProduct }}</p>
               <p class="heading">Current Product</p>
