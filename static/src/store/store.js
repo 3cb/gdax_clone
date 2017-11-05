@@ -28,7 +28,7 @@ export default new Vuex.Store({
             asks: [[0.00,0]],
             bids: [[0.00,0]]
         },
-        bookDepth: 17,
+        bookDepth: 22,
         bookConnected: false,
 
         // chart data
