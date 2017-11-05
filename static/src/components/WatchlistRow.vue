@@ -132,19 +132,25 @@ a {
 }
 
 a:hover {
-  color: hsl(0, 0%, 100%);
+  font-weight: 650;
 }
 
 #wl-detail li:hover {
-  background-color: hsl(0, 0%, 35%);
+  background-color: hsl(0, 0%, 45%);
+  color: black;
+  font-weight: 650;
 }
 
 .highlight-row {
-  background-color: hsl(0, 0%, 35%);
-  
+  background-color: hsl(0, 0%, 45%);
+  color: black;
+  font-weight: 650;
 }
 
 .highlight-row a {
-  color: hsl(0, 0%, 100%);
+  color: black;
+  font-weight: 650;
+  
+  
 }
 </style>
