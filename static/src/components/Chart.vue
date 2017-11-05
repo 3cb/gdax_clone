@@ -19,7 +19,7 @@
             </p>
           </div>
         </div>
-        <spinner class="spinner is-overlay" v-show="chartLoading" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
+        <spinner class="spinner is-overlay" v-if="chartLoading" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
     </div>
 </template>
 
@@ -168,14 +168,12 @@ export default {
       this.$store.commit('setChartInterval', interval)
     },
     rerenderChart() {
-      // this.chartLoading = true
       axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/candles', {
           params: getParams(this.$store.state.chartInterval)
         })
         .then(response => {
           this.$store.commit('setChartData', response.data)
           Plotly.update("chart", [this.trace0], this.layout)
-          // this.chartLoading = false
         })
         .catch(error => {
           console.log(error)

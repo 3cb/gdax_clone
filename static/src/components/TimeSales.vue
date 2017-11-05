@@ -7,7 +7,7 @@
               <span class="ts-date has-text-right">Time</span>
           </li>
       </ul>
-      <ul id="time-sales">
+      <ul id="time-sales" v-if="trades.length > 0">
         <transition-group name="ts">
           <li v-for="(trade, index) in trades" :key="trade.trade_id" class="ts-li">
               <span class="ts-size"><span>{{ trade.size }}</span></span>
@@ -22,10 +22,12 @@
           </li>
         </transition-group>
       </ul>
+      <spinner class="spinner is-overlay" v-if="trades.length === 0" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
     </div>
 </template>
 
 <script>
+import Spinner from 'vue-simple-spinner'
 import { addCommas } from "../lib/numbers.js";
 import moment from 'moment'
 import _ from 'lodash'
@@ -48,6 +50,9 @@ export default {
               .join(':')
               .value()
     }
+  },
+  components: {
+    Spinner
   }
 };
 </script>
