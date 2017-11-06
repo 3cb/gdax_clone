@@ -1,8 +1,8 @@
 <template>
-    <li>
-        <span class="book-span-one"></span>
-        <span class="book-span-one">{{ level[1] | bookSize }}</span>
-        <span class="book-span-one" :class="color">{{ level[0] | decimals }}</span>
+    <li class="br-li">
+        <span class="br-svg"></span>
+        <span class="br-size">{{ level[1] | bookSize }}</span>
+        <span class="br-price" :class="color">{{ level[0] | decimals }}</span>
     </li>
 </template>
 
@@ -28,5 +28,29 @@ export default {
 </script>
 
 <style>
-
+.br-li {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  margin-top: -5px;
+  margin-bottom: -5px;
+}
+.br-svg {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  flex: 0 1 20%;
+}
+.br-size {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  flex: 1 1 20%;
+}
+.br-price {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  flex: 0 1 37%;
+}
 </style>

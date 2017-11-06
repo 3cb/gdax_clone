@@ -1,10 +1,10 @@
 <template>
 <div id="order-book-cont">
     <ul id="ob-header">
-        <li class="spacer has-text-primary has-text-weight-semibold">
-            <span class="book-span-one"></span>
-            <span class="book-span-one">Size</span>
-            <span class="book-span-one">Price({{ denom }})</span>
+        <li id="br-header" class="spacer has-text-primary has-text-weight-semibold">
+            <span class="br-svg"></span>
+            <span class="br-size">Market Size</span>
+            <span class="br-price">Price({{ denom }})</span>
         </li>
     </ul>
     <div id="order-book" v-if="asks.length >= 2 && bids.length >= 2">
@@ -75,19 +75,23 @@ export default {
   width: 0px;
   background: transparent; /*make scrollbar transparent*/
 }
+#br-header {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
 
 .book-span-one {
   display: inline-block;
+  position: relative;
   text-align: right;
   width: 32%;
-  position: relative;
   top: -50%;
 }
 
 #ob-asks-wrapper {
   position: relative;
   height: calc(50vh - 95px);
- /* z-index: 1; */
 }
 #ob-asks {
   position: absolute;
@@ -98,28 +102,28 @@ export default {
 }
 #ob-bids {
   overflow: hidden;
+  position: relative;
+  top: 7px;
 }
 
 .spacer {
   border-style: solid;
   border-color: #4a4a4a;
-  /* border-color: black; */
   border-width: 1px 0px 1px 0px;
 }
 
 /* order book animations */
-.ob-anim-move {
-  transition: .4s;
-}
 .ob-anim-leave-active {
   background-color: hsl(0, 0%, 65%);
   font-weight: 650;
-  transition: all .4s;
+  transition: opacity .4s;
+  transition: background-color .3s;
+  transition: font-weight .3s;
 }
-.ob-leave-to {
+.ob-enter .ob-leave-to {
   opacity: 0;
 }
 .ob-anim-enter-active {
-  transition: all .5s;
+  transition: all .4s;
 }
 </style>
