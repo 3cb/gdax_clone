@@ -17,7 +17,7 @@ export default new Vuex.Store({
         selected_id: 1,
         selected_product: 'BTC-USD',
         selected_denom: 'USD',
-        salesDepth: 50,
+        tradesDepth: 70,
 
         // websocket variables
         ws: null,
@@ -125,6 +125,9 @@ export default new Vuex.Store({
                 state.products[index].priceDelta24h = ((parseFloat(data[0].price) - (parseFloat(state.products[index].open_24h))) / parseFloat(state.products[index].open_24h) * 100)
                 state.products[index].trade_id = data[0].trade_id
             }
+
+            // trim trades[] based on max depth from store
+            state.products[index].trades = _.take(state.products[index].trades, state.tradesDepth)
         },
         addTrade(state, { trade, product }) {
             var index = _.findIndex(state.products, o => { return o.product_id === product })
@@ -133,6 +136,7 @@ export default new Vuex.Store({
             } else if (trade.side === "buy") {
                 state.products[index].trades.unshift({ ...trade, change: '-', class: 'sales-span has-text-right has-text-danger' })
             }
+            state.products[index].trades.pop()
         },
         clearBook(state) {
             state.book = {
