@@ -151,15 +151,16 @@ export default new Vuex.Store({
                                 return [ parseFloat(v[0]).toFixed(2), v[1] ]
                             })
                             .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                            .takeRight(state.bookDepth * 15)
                             .value(),
                 bids: _.chain(book.bids)
                             .map(v => {
                                 return [parseFloat(v[0]).toFixed(2), v[1]]
                             })
                             .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                            .take(state.bookDepth * 15)
                             .value()
             }
-            console.log("init", state.book)
         },
         updateBook(state, { side, price, vol }) {
             // find correct price
@@ -176,6 +177,11 @@ export default new Vuex.Store({
                 } else {
                     _.pullAt(state.book[side], [i])
                 }
+            }
+            if (side === 'asks') {
+                _.takeRight(state.book[side], state.bookDepth * 15)
+            } else if (side === 'bids') {
+                _.take(state.book[side], state.bookDepth * 15)
             }
         },
 
