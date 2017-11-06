@@ -178,6 +178,8 @@ export default new Vuex.Store({
                     _.pullAt(state.book[side], [i])
                 }
             }
+
+            // trim length of order book
             if (side === 'asks') {
                 _.takeRight(state.book[side], state.bookDepth * 15)
             } else if (side === 'bids') {
@@ -212,10 +214,11 @@ export default new Vuex.Store({
                 state.close[i] = data[i][4]
                 state.volume[i] = data[i][5]
             }
+            console.log(state.time)
         },
         updateChartData(state, update) {
             // check date of sale to determine if new bar needs to be added to chart
-            var t = state.chartInterval === '1d' ? moment(update.time).toISOString() : moment(update.time).format().slice(0, -6)
+            var t = state.chartInterval === '1d' ? moment(update.time).toISOString() : moment(update.time).format().slice(0, -9)+":00"
 
             switch(state.chartInterval) {
                 case '1d':
