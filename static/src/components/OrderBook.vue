@@ -109,7 +109,7 @@ export default {
       Velocity(el,
         { opacity: 1 },
         {
-          duration: 300,
+          duration: 100,
           complete: function() {
             done()
           }
@@ -123,7 +123,7 @@ export default {
           color: '#000000'
         },
         {
-          duration: 300,
+          duration: 200,
           complete: function() {
             done()
           }
