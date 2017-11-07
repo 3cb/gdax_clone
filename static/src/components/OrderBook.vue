@@ -10,9 +10,12 @@
     <div id="order-book" v-if="asks.length >= 2 && bids.length >= 2">
         <div id="ob-asks-wrapper">
           <transition-group
-            name="ob-anim"
             tag="ul"
             id="ob-asks"
+            :css="false"
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @leave="leave"
           >
             <li
               is="book-row"
@@ -32,9 +35,12 @@
           </li>
         </ul>
         <transition-group
-          name="ob-anim"
-          tag="ul"
-          id="ob-bids"
+            tag="ul"
+            id="ob-bids"
+            :css="false"
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @leave="leave"
         >
           <li
             is="book-row"
@@ -93,6 +99,35 @@ export default {
     },
     maxSize() {
       return this.maxSizeAsks > this.maxSizeBids ? this.maxSizeAsks : this.maxSizeBids
+    }
+  },
+  methods: {
+    beforeEnter: function(el) {
+      el.style.opacity = 0
+    },
+    enter: function(el, done) {
+      Velocity(el,
+        { opacity: 1 },
+        {
+          duration: 300,
+          complete: function() {
+            done()
+          }
+        })
+    },
+    leave: function(el, done) {
+      Velocity(el,
+        {
+          opacity: 0,
+          backgroundColor: '#a6a6a6',
+          color: '#000000'
+        },
+        {
+          duration: 300,
+          complete: function() {
+            done()
+          }
+        })
     }
   },
   components: {
@@ -156,20 +191,5 @@ export default {
   border-style: solid;
   border-color: #4a4a4a;
   border-width: 1px 0px 1px 0px;
-}
-
-/* order book animations */
-.ob-anim-leave-active {
-  background-color: hsl(0, 0%, 65%);
-  font-weight: 650;
-  transition: opacity .4s;
-  transition: background-color .3s;
-  transition: font-weight .3s;
-}
-.ob-enter .ob-leave-to {
-  opacity: 0;
-}
-.ob-anim-enter-active {
-  transition: all .4s;
 }
 </style>
