@@ -144,6 +144,7 @@ export default new Vuex.Store({
                 bids: [[0.00, 0]]
             }
         },
+
         initBook(state, book) {
             state.book = {
                 asks: _.chain(book.asks)
@@ -205,8 +206,11 @@ export default new Vuex.Store({
             state.chartLoading = !state.chartLoading
         },
         setChartData(state, data) {
+            // control for short data from API
+            var limit = data.length < state.chartDepth ? data.length : state.chartDepth
+
             // initialize chart with data from http request
-            for ( let i = 0; i < state.chartDepth; i++) {
+            for (let i = 0; i < limit; i++) {
                 state.time[i] = state.chartInterval === '1d' ? moment.unix(data[i][0]).toISOString() : moment.unix(data[i][0]).format().slice(0, -6)
                 state.low[i] = data[i][1]
                 state.high[i] = data[i][2]
@@ -214,7 +218,6 @@ export default new Vuex.Store({
                 state.close[i] = data[i][4]
                 state.volume[i] = data[i][5]
             }
-            console.log(state.time)
         },
         updateChartData(state, update) {
             // check date of sale to determine if new bar needs to be added to chart
