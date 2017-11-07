@@ -1,19 +1,25 @@
 <template>
     <li class="br-li">
-        <span class="br-svg"></span>
+        <span class="br-svg">
+          <size-rec
+            :max="max"
+            :size="level[1]"
+            :side="side">
+          </size-rec>
+        </span>
         <span class="br-size">{{ level[1] | bookSize }}</span>
         <span class="br-price" :class="color">{{ level[0] | decimals }}</span>
     </li>
 </template>
 
 <script>
-import { addCommas } from '../lib/numbers.js'
-
+import SizeRec from "./SizeRec.vue";
+import { addCommas } from "../lib/numbers.js";
 
 export default {
-  props: ["level", "color"],
+  props: ["level", "max", "color", "side"],
   filters: {
-      decimals(price) {
+    decimals(price) {
       if (price < 1) {
         return addCommas(parseFloat(price).toFixed(5));
       } else {
@@ -21,8 +27,11 @@ export default {
       }
     },
     bookSize(size) {
-       return parseFloat(size).toFixed(8)
+      return parseFloat(size).toFixed(8);
     }
+  },
+  components: {
+    SizeRec
   }
 };
 </script>

@@ -9,8 +9,20 @@
     </ul>
     <div id="order-book" v-if="asks.length >= 2 && bids.length >= 2">
         <div id="ob-asks-wrapper">
-          <transition-group name="ob-anim" tag="ul" id="ob-asks">
-            <li is="book-row" v-for="level in asks" :level="level" :color="'has-text-danger'" :key="level[0]"></li>
+          <transition-group
+            name="ob-anim"
+            tag="ul"
+            id="ob-asks"
+          >
+            <li
+              is="book-row"
+              v-for="level in asks"
+              side="ask"
+              :level="level"
+              :max="maxSize"
+              :color="'has-text-danger'"
+              :key="level[0]">
+            </li>
           </transition-group>
         </div>
         <ul>
@@ -19,11 +31,28 @@
               <span class="book-span-one is-pulled-right">{{ spread }}</span>
           </li>
         </ul>
-        <transition-group name="ob-anim" tag="ul" id="ob-bids">
-          <li is="book-row" v-for="level in bids" :level="level" :color="'has-text-success'" :key="level[0]"></li>
+        <transition-group
+          name="ob-anim"
+          tag="ul"
+          id="ob-bids"
+        >
+          <li
+            is="book-row"
+            v-for="level in bids"
+            side="bid"
+            :level="level"
+            :max="maxSize"
+            :color="'has-text-success'"
+            :key="level[0]">
+          </li>
         </transition-group>
     </div>
-    <spinner class="spinner is-overlay" v-if="asks.length < 2 && bids.length < 2" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
+    <spinner
+      class="spinner is-overlay"
+      v-if="asks.length < 2 && bids.length < 2"
+      size="huge"
+      line-fg-color="hsl(171, 100%, 41%)">
+    </spinner>
 </div>
 </template>
 
@@ -47,6 +76,23 @@ export default {
     },
     spread() {
       return (_.last(this.asks)[0] - this.bids[0][0]).toFixed(2);
+    },
+    maxSizeAsks() {
+      return _.chain(this.asks)
+                .orderBy([a => parseFloat(a[1])], ['desc'])
+                .take(1)
+                .map(v => v[1])
+                .value()
+    },
+    maxSizeBids() {
+      return _.chain(this.asks)
+                .orderBy([a => parseFloat(a[1])], ['desc'])
+                .take(1)
+                .map(v => v[1])
+                .value()
+    },
+    maxSize() {
+      return this.maxSizeAsks > this.maxSizeBids ? this.maxSizeAsks : this.maxSizeBids
     }
   },
   components: {
@@ -91,7 +137,7 @@ export default {
 
 #ob-asks-wrapper {
   position: relative;
-  height: calc(50vh - 95px);
+  height: calc(50vh - 89px);
 }
 #ob-asks {
   position: absolute;
