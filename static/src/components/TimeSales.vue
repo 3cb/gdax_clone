@@ -8,21 +8,40 @@
           </li>
       </ul>
       <ul id="time-sales" v-if="trades.length > 0">
-        <transition-group name="ts">
+        <transition-group
+          :css="false"
+          @before-enter="beforeEnter"
+          @enter="enter"
+        >
           <li v-for="(trade, index) in trades" :key="trade.trade_id" class="ts-li">
               <span class="ts-size"><span>{{ trade.size }}</span></span>
 
               <div class="ts-price-wrap">
                 <span :class="trade.class" class="ts-price">{{ trade.price | decimals }}</span>
-                <span class="icon" :class="trade.class" v-if="trade.change === '+'"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></span>
-                <span class="icon" :class="trade.class" v-if="trade.change === '-'"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
+                <span
+                  class="icon"
+                  :class="trade.class"
+                  v-if="trade.change === '+'">
+                    <i class="fa fa-long-arrow-up" aria-hidden="true"></i>
+                </span>
+                <span
+                  class="icon"
+                  :class="trade.class"
+                  v-if="trade.change === '-'">
+                    <i class="fa fa-long-arrow-down" aria-hidden="true"></i>
+                </span>
               </div>
 
               <span class="ts-date has-text-right">{{ trade.time | formatDate }}</span>
           </li>
         </transition-group>
       </ul>
-      <spinner class="spinner is-overlay" v-if="trades.length === 0" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
+      <spinner
+        class="spinner is-overlay"
+        v-if="trades.length === 0"
+        size="huge"
+        line-fg-color="hsl(171, 100%, 41%)">
+      </spinner>
     </div>
 </template>
 
@@ -49,6 +68,21 @@ export default {
               .dropRight(1)
               .join(':')
               .value()
+    }
+  },
+  methods: {
+    beforeEnter: function(el) {
+      el.style.opacity = 0
+    },
+    enter: function(el, done) {
+      Velocity(el,
+      { opacity: 1 },
+      {
+        duration: 400,
+        complete: function() {
+          done()
+        }
+      })
     }
   },
   components: {
@@ -114,16 +148,5 @@ li {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 31%;
-}
-
-/* new trade animation */
-.ts-enter-active {
-  /* background: hsl(141, 71%, 90%); */
-  transition: all .3s;
-}
-.ts-enter {
-  opacity: 0;
-  /* background: white; */
-
 }
 </style>
