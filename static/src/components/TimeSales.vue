@@ -73,10 +73,16 @@ export default {
   methods: {
     beforeEnter: function(el) {
       el.style.opacity = 0
+      el.style.backgroundColor = '#a6a6a6'
     },
     enter: function(el, done) {
       Velocity(el,
-      { opacity: 1 },
+      {
+        opacity: 1,
+        backgroundColor: '#ffffff'
+        // green: #23d160
+        // red: #ff3860
+      },
       {
         duration: 400,
         complete: function() {
