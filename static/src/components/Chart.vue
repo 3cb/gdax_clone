@@ -151,7 +151,6 @@ export default {
     },
     close: {
       handler() {
-        // Plotly.update("chart", [this.trace], this.layout);
         Plotly.purge("chart");
         Plotly.plot("chart", [this.trace], this.layout);
       }
