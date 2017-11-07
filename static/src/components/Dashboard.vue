@@ -74,7 +74,6 @@ export default {
       },
       bookInitListener: {
         next: (value) => {
-          // console.log(value);
           this.$store.commit("initBook", value);
         },
         error: (err) => {
@@ -86,7 +85,6 @@ export default {
       },
       bookUpdateListener: {
         next: (value) => {
-          // console.log(value);
           this.$store.commit("updateBook", {
             side: value[0] === 'buy' ? 'bids' : 'asks',
             price: value[1],
@@ -230,9 +228,6 @@ export default {
   },
   beforeMount() {
     this.getTrades()
-    // For debugging =========== Remove ======================
-    // this.main$.addListener(this.mainListener);
-    // =======================================================
 
     this.ticker$.addListener(this.tickerListener);
     this.trade$.addListener(this.tradeListener);
@@ -255,7 +250,7 @@ export default {
         this.$store.commit('initTrades', { data: ltc_eur.data, product: "LTC-EUR" })
       }))
       .catch(error => {
-        console.log(error)
+        console.error(error)
       })
     }
   },

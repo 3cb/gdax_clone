@@ -10,16 +10,42 @@
           <div id="chart"></div>
           <div class="field is-grouped chart-btn">
             <p class="control">
-              <button class="button is-small is-primary" @click="setInterval('1d')" :disabled="dailyDisabled">Daily</button>
-              <button class="button is-small is-primary" @click="setInterval('1m')" :disabled="!dailyDisabled">1 Minute</button>
+              <button
+                class="button is-small is-primary"
+                @click="setInterval('1d')"
+                :disabled="dailyDisabled"
+              >Daily
+              </button>
+              <button
+                class="button is-small is-primary"
+                @click="setInterval('1m')"
+                :disabled="!dailyDisabled"
+              >1 Minute
+              </button>
             </p>
             <p class="control">
-                <button class="button is-small is-primary" @click="setType('candle')" :disabled="candleDisabled">Candle</button>
-                <button class="button is-small is-primary" @click="setType('line')" :disabled="!candleDisabled">Line</button>
+                <button
+                  class="button is-small is-primary"
+                  @click="setType('candle')"
+                  :disabled="candleDisabled"
+                >Candle
+                </button>
+                <button
+                  class="button is-small is-primary"
+                  @click="setType('line')"
+                  :disabled="!candleDisabled"
+                >Line
+                </button>
             </p>
           </div>
         </div>
-        <spinner class="spinner is-overlay" v-if="chartLoading" size="huge" line-fg-color="hsl(171, 100%, 41%)"></spinner>
+        <spinner
+          class="spinner is-overlay"
+          v-if="chartLoading"
+          size="huge"
+          line-fg-color="hsl(171, 100%, 41%)"
+        >
+        </spinner>
     </div>
 </template>
 
@@ -125,7 +151,9 @@ export default {
     },
     close: {
       handler() {
-        Plotly.update("chart", [this.trace], this.layout);
+        // Plotly.update("chart", [this.trace], this.layout);
+        Plotly.purge("chart");
+        Plotly.plot("chart", [this.trace], this.layout);
       }
     },
     product: {
@@ -168,7 +196,7 @@ export default {
           this.$store.commit('toggleChartLoad')
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
       })
     },
     rerenderChart() {
@@ -182,7 +210,7 @@ export default {
           Plotly.update("chart", [this.trace], this.layout)
         })
         .catch(error => {
-          console.log(error)
+          console.error(error)
         })
     }
   },

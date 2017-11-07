@@ -1,24 +1,65 @@
 <template>
     <ul id="wl-detail">
-        <li v-for="product in classedProducts" :key="product.id" class="watchlist-margin" :class="product.class">
+        <li
+          v-for="product in classedProducts"
+          :key="product.id"
+          class="watchlist-margin"
+          :class="product.class"
+        >
             <a @click="changeProduct(product.id)" class="wl-a wl-li">
+
                 <div class="ws-pro-div has-text-left">{{ product.name }}</div>
+
                 <div class="wl-price">
-                  <span class="icon" v-if="product.product_id.split('-')[1] === 'USD'"><i class="fa fa-usd" aria-hidden="true"></i></span>
-                  <span class="icon" v-if="product.product_id.split('-')[1] === 'EUR'"><i class="fa fa-eur" aria-hidden="true"></i></span>
-                  <span class="icon" v-if="product.product_id.split('-')[1] === 'GBP'"><i class="fa fa-gbp" aria-hidden="true"></i></span>
-                  <span class="icon" v-if="product.product_id.split('-')[1] === 'BTC'"><i class="fa fa-btc" aria-hidden="true"></i></span>
+                  <span
+                    class="icon"
+                    v-if="product.product_id.split('-')[1] === 'USD'"
+                  >
+                      <i class="fa fa-usd" aria-hidden="true"></i>
+                  </span>
+                  <span
+                    class="icon"
+                    v-if="product.product_id.split('-')[1] === 'EUR'"
+                  >
+                      <i class="fa fa-eur" aria-hidden="true"></i>
+                  </span>
+                  <span
+                    class="icon"
+                    v-if="product.product_id.split('-')[1] === 'GBP'"
+                  >
+                      <i class="fa fa-gbp" aria-hidden="true"></i>
+                  </span>
+                  <span
+                    class="icon"
+                    v-if="product.product_id.split('-')[1] === 'BTC'"
+                  >
+                      <i class="fa fa-btc" aria-hidden="true"></i>
+                  </span>
                   <div class="ws-price-div has-text-right">{{ product.price | decimals }}</div>
                 </div>
+
                 <div class="wl-delta">
-                    <div :class="product.deltaClass" class="wl-delta-div has-text-right">{{ Math.abs(product.priceDelta24h).toFixed(2) }}%</div>
-                    <div :class="product.deltaClass" class="icon" v-if="product.priceDelta24h > 0">
+                    <div
+                      :class="product.deltaClass"
+                      class="wl-delta-div has-text-right"
+                    >{{ Math.abs(product.priceDelta24h).toFixed(2) }}%
+                    </div>
+                    <div
+                      :class="product.deltaClass"
+                      class="icon"
+                      v-if="product.priceDelta24h > 0"
+                    >
                         <i class="fa fa-arrow-up" aria-hidden="true"></i>
                     </div>
-                    <div :class="product.deltaClass" class="icon" v-if="product.priceDelta24h < 0">
+                    <div
+                      :class="product.deltaClass"
+                      class="icon"
+                      v-if="product.priceDelta24h < 0"
+                    >
                         <i class="fa fa-arrow-down" aria-hidden="true"></i>
                     </div>
                 </div>
+
             </a>
         </li>
     </ul>
