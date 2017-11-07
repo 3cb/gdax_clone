@@ -49,9 +49,14 @@ export default new Vuex.Store({
         setWin(state, win) {
             state.win = win;
         },
+        
         toggleWS(state) {
             state.wsConnected = !state.wsConnected
         },
+        startWS(state) {
+            state.ws = new WebSocket("wss://ws-feed.gdax.com")
+        },
+
         updateProduct(state, id) {
             state.selected_id = id
             state.selected_product = (_.find(state.products, o => {

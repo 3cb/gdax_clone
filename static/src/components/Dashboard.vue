@@ -140,18 +140,17 @@ export default {
     selected_product() {
       return this.$store.state.selected_product
     },
+
     wsConnected() {
       return this.$store.state.wsConnected;
     },
     producer() {
-      var store = this.$store;
       return {
         start: (listener) => {
-          store.state.ws = new WebSocket("wss://ws-feed.gdax.com");
-          var sock = store.state.ws;
-          store.state.ws.onopen = event => {
-            store.commit("toggleWS");
-            sock.send(
+          this.$store.commit('startWS')
+          this.$store.state.ws.onopen = event => {
+            this.$store.commit("toggleWS");
+            this.$store.state.ws.send(
               JSON.stringify({
                 type: "subscribe",
                 channels: [
@@ -191,13 +190,13 @@ export default {
               })
             );
           };
-          store.state.ws.onmessage = event => {
+          this.$store.state.ws.onmessage = event => {
             listener.next(JSON.parse(event.data));
           };
         },
-        stop() {
-          store.state.ws.close();
-          store.state.ws.onclose = event => {
+        stop: () => {
+          this.$store.state.ws.close();
+          this.$store.state.ws.onclose = event => {
             console.log(event);
           };
         }
