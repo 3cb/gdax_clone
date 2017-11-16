@@ -153,32 +153,28 @@ export default new Vuex.Store({
         initBook(state, book) {
             state.book = {
                 asks: _.chain(book.asks)
-                            .map(v => {
-                                return [ parseFloat(v[0]).toFixed(2), v[1] ]
-                            })
-                            .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                            .orderBy([a => { return parseFloat(a[0]).toFixed(8) }], ['desc'])
                             .takeRight(state.bookDepth * 15)
                             .value(),
                 bids: _.chain(book.bids)
-                            .map(v => {
-                                return [parseFloat(v[0]).toFixed(2), v[1]]
-                            })
-                            .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                            .orderBy([a => { return parseFloat(a[0]).toFixed(8) }], ['desc'])
                             .take(state.bookDepth * 15)
                             .value()
             }
+            console.log(state.book)
         },
         updateBook(state, { side, price, vol }) {
+            console.log(price, vol)
             // find correct price
-            var i = _.findIndex(state.book[side], a => { return parseFloat(a[0]).toFixed(2) === parseFloat(price).toFixed(2) })
+            var i = _.findIndex(state.book[side], a => { return parseFloat(a[0]).toFixed(8) === parseFloat(price).toFixed(8) })
+            console.log(typeof(price))
 
             if (i === -1) {
                 state.book[side] = _.concat(state.book[side], [[price, vol]])
                 state.book[side] = _.orderBy(state.book[side], [a => { return parseFloat(a[0]) }], ['desc'])
             } else {
                 if (vol != '0') {
-                    let arr = state.book[side]
-                    arr[i] = [ parseFloat(price).toFixed(2), vol ]
+                    state.book[side][i][1] =  vol
                     
                 } else {
                     _.pullAt(state.book[side], [i])
