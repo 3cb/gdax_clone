@@ -154,11 +154,11 @@ export default new Vuex.Store({
             state.book = {
                 asks: _.chain(book.asks)
                             .orderBy([a => { return parseFloat(a[0]).toFixed(8) }], ['desc'])
-                            .takeRight(state.bookDepth * 15)
+                            .takeRight(state.bookDepth * 8)
                             .value(),
                 bids: _.chain(book.bids)
                             .orderBy([a => { return parseFloat(a[0]).toFixed(8) }], ['desc'])
-                            .take(state.bookDepth * 15)
+                            .take(state.bookDepth * 8)
                             .value()
             }
             console.log(state.book)
@@ -183,9 +183,9 @@ export default new Vuex.Store({
 
             // trim length of order book
             if (side === 'asks') {
-                _.takeRight(state.book[side], state.bookDepth * 15)
+                _.takeRight(state.book[side], state.bookDepth * 8)
             } else if (side === 'bids') {
-                _.take(state.book[side], state.bookDepth * 15)
+                _.take(state.book[side], state.bookDepth * 8)
             }
         },
 
