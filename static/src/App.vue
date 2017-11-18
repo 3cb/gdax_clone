@@ -38,9 +38,6 @@ export default {
           height: v.target.innerHeight
         }
       })
-    },
-    type() {
-      return this.$store.state.win.type
     }
   },
   mounted() {
