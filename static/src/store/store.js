@@ -161,13 +161,10 @@ export default new Vuex.Store({
                             .take(state.bookDepth * 8)
                             .value()
             }
-            console.log(state.book)
         },
         updateBook(state, { side, price, vol }) {
-            console.log(price, vol)
             // find correct price
             var i = _.findIndex(state.book[side], a => { return parseFloat(a[0]).toFixed(8) === parseFloat(price).toFixed(8) })
-            console.log(typeof(price))
 
             if (i === -1) {
                 state.book[side] = _.concat(state.book[side], [[price, vol]])
@@ -223,7 +220,7 @@ export default new Vuex.Store({
         updateChartData(state, update) {
             // check date of sale to determine if new bar needs to be added to chart
             var t = state.chartInterval === '1d' ? moment(update.time).toISOString() : moment(update.time).format().slice(0, -9)+":00"
-
+            
             switch(state.chartInterval) {
                 case '1d':
                     if (update.price != state.close[0] && t.split('T')[0].split('-')[2] === state.time[0].split('T')[0].split('-')[2]) {
