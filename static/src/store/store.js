@@ -42,7 +42,7 @@ export default new Vuex.Store({
         candleDisabled: true,
         chartLoading: false,
         chartType: 'candle',    // either 'candle' or 'line'
-        chartInterval: '1m',    // either '1d' or '1m'
+        chartInterval: '1d',    // either '1d' or '1m'
         chartDepth: 50
     },
     mutations: {
