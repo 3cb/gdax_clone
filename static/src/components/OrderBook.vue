@@ -104,12 +104,16 @@ export default {
   methods: {
     beforeEnter: function(el) {
       el.style.opacity = 0
+      el.style.backgroundColor = '#a6a6a6'
     },
     enter: function(el, done) {
       Velocity(el,
-        { opacity: 1 },
         {
-          duration: 100,
+          opacity: 1,
+          backgroundColor: '#ffffff'
+        },
+        {
+          duration: 700,
           complete: function() {
             done()
           }
@@ -118,12 +122,10 @@ export default {
     leave: function(el, done) {
       Velocity(el,
         {
-          opacity: 0,
-          backgroundColor: '#a6a6a6',
-          color: '#000000'
+          color: '#b5b5b5'
         },
         {
-          duration: 200,
+          duration: 500,
           complete: function() {
             done()
           }

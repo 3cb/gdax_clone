@@ -80,11 +80,9 @@ export default {
       {
         opacity: 1,
         backgroundColor: '#ffffff'
-        // green: #23d160
-        // red: #ff3860
       },
       {
-        duration: 400,
+        duration: 700,
         complete: function() {
           done()
         }
