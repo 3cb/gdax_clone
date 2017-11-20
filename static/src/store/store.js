@@ -153,13 +153,13 @@ export default new Vuex.Store({
         initBook(state, book) {
             state.book = {
                 asks: _.chain(book.asks)
-                            .orderBy([a => { return parseFloat(a[0]).toFixed(8) }], ['desc'])
-                            .takeRight(state.bookDepth * 8)
-                            .value(),
+                .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                .takeRight(state.bookDepth * 8)
+                .value(),
                 bids: _.chain(book.bids)
-                            .orderBy([a => { return parseFloat(a[0]).toFixed(8) }], ['desc'])
-                            .take(state.bookDepth * 8)
-                            .value()
+                .orderBy([a => { return parseFloat(a[0]) }], ['desc'])
+                .take(state.bookDepth * 8)
+                .value()
             }
         },
         updateBook(state, { side, price, vol }) {
