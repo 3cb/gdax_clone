@@ -42,7 +42,7 @@ export default {
   flex-flow: row nowrap;
   justify-content: space-between;
   margin-top: -5px;
-  margin-bottom: -5px;
+  margin-bottom: -7px;
 }
 .br-svg {
   display: inline-flex;

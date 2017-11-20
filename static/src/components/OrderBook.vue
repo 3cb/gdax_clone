@@ -181,7 +181,7 @@ export default {
   bottom: 0;
   right: 0;
   overflow: hidden;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 }
 #ob-bids {
   overflow: hidden;
