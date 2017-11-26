@@ -1,10 +1,12 @@
 # gdax_clone
-
-> A Vue.js project
+A GDAX Bitcoin Exchange clone built on Vue/Vuex with xstream for websocket stream and a Go backend.
+Compare to https://www.gdax.com/trade/BTC-USD (API Docs here: https://docs.gdax.com/)
 
 ## Build Setup
 
 ``` bash
+From static folder:
+
 # install dependencies
 npm install
 
@@ -15,4 +17,3 @@ npm run dev
 npm run build
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
