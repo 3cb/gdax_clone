@@ -1,19 +1,11 @@
 <template>
     <li class="br-li">
-        <span class="br-svg">
-          <size-rec
-            :max="max"
-            :size="level[1]"
-            :side="side">
-          </size-rec>
-        </span>
         <span class="br-size">{{ level[1] | bookSize }}</span>
         <span class="br-price" :class="color">{{ level[0] | decimals }}</span>
     </li>
 </template>
 
 <script>
-import SizeRec from "./SizeRec.vue";
 import { addCommas } from "../lib/numbers.js";
 
 export default {
@@ -29,9 +21,6 @@ export default {
     bookSize(size) {
       return parseFloat(size).toFixed(8);
     }
-  },
-  components: {
-    SizeRec
   }
 };
 </script>
