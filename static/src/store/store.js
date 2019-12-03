@@ -72,8 +72,8 @@ export default new Vuex.Store({
             })
 
             if (ticker.sequence > state.products[i].sequence) {
-                // only set price/priceDelta on intial ticker message (uses "matches" channel messages to update)
-                if (!ticker.time) {
+                // only set price/priceDelta on initial ticker message (uses "matches" channel messages to update)
+                if (!state.products[i].price) {
                     state.products[i].price = ticker.price
                     state.products[i].priceDelta24h = ((parseFloat(ticker.price) - (parseFloat(ticker.open_24h))) / parseFloat(ticker.open_24h) * 100)
                 }
@@ -133,6 +133,10 @@ export default new Vuex.Store({
 
             // trim trades[] based on max depth from store
             state.products[index].trades = _.take(state.products[index].trades, state.tradesDepth)
+        },
+        clearTrades(state, id) {
+            var index = _.findIndex(state.products, o => { return o.id === id })
+            state.products[index].trades = []
         },
         addTrade(state, { trade, product }) {
             var index = _.findIndex(state.products, o => { return o.product_id === product })
