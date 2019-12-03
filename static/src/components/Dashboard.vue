@@ -49,7 +49,6 @@ export default {
       },
       tradeListener: {
         next: (value) => {
-          console.log(value.product_id)
           this.$store.commit('addTrade', {
             trade: {
               price: value.price,
@@ -172,15 +171,7 @@ export default {
                   {
                     name: "matches",
                     product_ids: [
-                      "BTC-USD",
-                      "BTC-EUR",
-                      "BTC-GBP",
-                      "ETH-USD",
-                      "ETH-BTC",
-                      "ETH-EUR",
-                      "LTC-USD",
-                      "LTC-BTC",
-                      "LTC-EUR"
+                      "BTC-USD"
                     ]
                   },
                   {
