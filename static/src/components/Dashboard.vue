@@ -49,6 +49,7 @@ export default {
       },
       tradeListener: {
         next: (value) => {
+          console.log(value.product_id)
           this.$store.commit('addTrade', {
             trade: {
               price: value.price,
@@ -236,20 +237,12 @@ export default {
   },
   methods: {
     getTrades() {
-      axios.all([getBTCUSD(), getBTCEUR(), getBTCGBP(), getETHUSD(), getETHBTC(), getETHEUR(), getLTCUSD(), getLTCBTC(), getLTCEUR()])
-      .then(axios.spread((btc_usd, btc_eur, btc_gbp, eth_usd, eth_btc, eth_eur, ltc_usd, ltc_btc, ltc_eur) => {
-        this.$store.commit('initTrades', { data: btc_usd.data, product: "BTC-USD" })
-        this.$store.commit('initTrades', { data: btc_eur.data, product: "BTC-EUR" })
-        this.$store.commit('initTrades', { data: btc_gbp.data, product: "BTC-GBP" })
-        this.$store.commit('initTrades', { data: eth_usd.data, product: "ETH-USD" })
-        this.$store.commit('initTrades', { data: eth_btc.data, product: "ETH-BTC" })
-        this.$store.commit('initTrades', { data: eth_eur.data, product: "ETH-EUR" })
-        this.$store.commit('initTrades', { data: ltc_usd.data, product: "LTC-USD" })
-        this.$store.commit('initTrades', { data: ltc_btc.data, product: "LTC-BTC" })
-        this.$store.commit('initTrades', { data: ltc_eur.data, product: "LTC-EUR" })
-      }))
-      .catch(error => {
-        console.error(error)
+      axios.get('https://api.gdax.com/products/BTC-USD/trades')
+      .then(response => {
+        this.$store.commit('initTrades', { data: response.data, product: "BTC-USD" })
+      })
+      .catch(err => {
+        console.error(err)
       })
     }
   },

@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import axios from "axios"
 import { addCommas } from "../lib/numbers.js";
 
 export default {
@@ -103,6 +104,8 @@ export default {
         })
       );
       this.$store.commit('clearBook');
+      this.$store.commit('clearTrades', this.$store.state.selected_id);
+
       this.$store.commit("updateProduct", id);
       this.$store.state.ws.send(
         JSON.stringify({
@@ -111,6 +114,14 @@ export default {
           channels: ["level2"]
         })
       );
+
+      axios.get('https://api.gdax.com/products/' + this.$store.state.selected_product + '/trades')
+      .then(response => {
+        this.$store.commit('initTrades', { data: response.data, product: this.$store.state.selected_product })
+      })
+      .catch(err => {
+        console.error(err)
+      })
     }
   }
 };
