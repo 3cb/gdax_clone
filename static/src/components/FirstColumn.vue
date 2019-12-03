@@ -5,7 +5,7 @@
                 <span class="icon">
                     <a href="https://github.com/3cb/gdax_clone" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
                 </span>
-                <a href="https://www.gdax.com/trade/BTC-USD" target="_blank"><strong>GDAX_clone</strong></a>
+                <a href="https://pro.coinbase.com/trade/BTC-USD" target="_blank"><strong>Coinbase Pro</strong></a>
             </span>
         </nav>
         <nav class="level info is-marginless is-paddingless">
