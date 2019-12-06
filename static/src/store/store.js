@@ -174,11 +174,10 @@ export default new Vuex.Store({
                 state.book[side] = _.concat(state.book[side], [[price, vol]])
                 state.book[side] = _.orderBy(state.book[side], [a => { return parseFloat(a[0]) }], ['desc'])
             } else {
-                if (vol != '0') {
-                    state.book[side][i][1] =  vol
-                    
-                } else {
+                if (vol === '0.00000000') {
                     _.pullAt(state.book[side], [i])
+                } else {
+                    Vue.set(state.book[side][i], 1, vol)
                 }
             }
 
@@ -189,7 +188,6 @@ export default new Vuex.Store({
                 _.take(state.book[side], state.bookDepth * 8)
             }
         },
-
 
         setChartInterval(state, interval) {
             state.chartInterval = interval
