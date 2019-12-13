@@ -1,6 +1,48 @@
 <template>
     <div>
       <div class="columns">
+          <div class="column is-2">
+              <nav id="col1-header" class="level info is-paddingless is-marginless">
+                <span class="level-item is-size-5">
+                    <span class="icon">
+                        <a href="https://github.com/3cb/gdax_clone" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
+                    </span>
+                    <a href="https://pro.coinbase.com/trade/BTC-USD" target="_blank"><strong>Coinbase Pro</strong></a>
+                </span>
+            </nav>
+          </div>
+
+        <div class="column">
+          <nav v-if="winSize.width > 845" class="level info is-marginless is-paddingless">
+              <div class="column is-3 level-item has-text-centered">
+                <div>
+                  <p class="has-text-weight-bold has-text-primary">{{ selectedProduct.name }}</p>
+                  <p class="heading">Current Product</p>
+                </div>
+              </div>
+              <div class="column is-3 level-item has-text-centered">
+                <div>
+                    <p class="has-text-weight-bold">{{ selectedProduct.price | decimals }} {{ tickerDenom }}</p>
+                    <p class="heading">Last trade price</p>
+                </div>
+              </div>
+              <div class="column is-3 level-item has-text-centered">
+                  <div>
+                      <p :class="deltaClass" class="has-text-weight-bold">{{ deltaSign }}{{ selectedProduct.priceDelta24h.toFixed(2) }} %</p>
+                      <p class="heading">24 Hour price</p>
+                  </div>
+              </div>
+              <div class="column is-3 level-item has-text-centered">
+                  <div>
+                      <p class="has-text-weight-bold">{{ selectedProduct.volume_24h | formatVolume }} {{ tickerSymbol }}</p>
+                      <p class="heading">24 hour volume</p>
+                  </div>
+              </div>
+          </nav>
+        </div>
+      </div>
+
+      <div class="columns">
           <div class="column" :class="wlClass">
               <first-column></first-column>
           </div>
@@ -30,6 +72,7 @@ import FourthColumn from "./FourthColumn.vue";
 import xs from "xstream";
 import axios from "axios";
 import _ from "lodash";
+import { addCommas } from '../lib/numbers.js'
 import { getBTCUSD, getBTCEUR, getBTCGBP, getETHUSD, getETHBTC, getETHEUR, getLTCUSD, getLTCBTC, getLTCEUR } from '../lib/trades.js'
 
 export default {
@@ -137,8 +180,27 @@ export default {
       return this.winSize > 1600 ? '' : 'lower-chart'
     },
 
-    selected_product() {
-      return this.$store.state.selected_product
+    selectedProduct() {
+      // return this.$store.state.selected_product
+      return this.$store.state.products[this.$store.state.selected_id-1]
+    },
+    tickerSymbol() {
+      var arr = _.split(this.selectedProduct.name, '/')
+      return arr[0]
+    },
+    tickerDenom() {
+      var arr = _.split(this.selectedProduct.name, '/')
+      return arr[1]
+    },
+    deltaSign() {
+      if (this.selectedProduct.priceDelta24h >= 0) {
+          return '+'
+      } else {
+          return ''
+      }
+    },
+    deltaClass() {
+      return this.selectedProduct.deltaClass
     },
 
     wsConnected() {
@@ -235,6 +297,18 @@ export default {
       .catch(err => {
         console.error(err)
       })
+    }
+  },
+  filters: {
+    formatVolume(volume) {
+        return addCommas(Math.round(parseFloat(volume)))
+    },
+    decimals(price) {
+        if (price < 1 ) {
+            return addCommas((parseFloat(price)).toFixed(5))
+        } else {
+            return addCommas((parseFloat(price)).toFixed(2))
+        }
     }
   },
   components: {

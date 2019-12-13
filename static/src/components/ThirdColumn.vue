@@ -1,6 +1,6 @@
 <template>
     <div id="column3">
-        <nav class="level info is-marginless is-paddingless">
+        <nav v-if="winSize.width <= 1600 && winSize.width > 800" class="level info is-marginless is-paddingless">
           <div class="level-item has-text-centered">
             <div>
               <p class="has-text-weight-bold has-text-primary">{{ selectedProduct.name }}</p>
@@ -53,6 +53,9 @@ export default {
         }
     },
     computed: {
+        winSize() {
+            return this.$store.state.win
+        },
         selectedProduct() {
             return this.$store.state.products[this.$store.state.selected_id-1]
         },

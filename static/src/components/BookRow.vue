@@ -29,15 +29,9 @@ export default {
 .br-li {
   display: inline-flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: -5px;
   margin-bottom: -7px;
-}
-.br-svg {
-  display: inline-flex;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-  flex: 0 1 20%;
 }
 .br-size {
   display: inline-flex;
@@ -49,6 +43,6 @@ export default {
   display: inline-flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
-  flex: 0 1 37%;
+  flex: 0 1 57%;
 }
 </style>

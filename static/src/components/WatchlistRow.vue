@@ -121,7 +121,6 @@ export default {
           channels: [ "level2", "matches" ]
         })
       );
-
     }
   }
 };

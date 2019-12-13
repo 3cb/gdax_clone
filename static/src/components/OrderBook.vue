@@ -22,7 +22,6 @@
               v-for="level in asks"
               side="ask"
               :level="level"
-              :max="maxSize"
               :color="'has-text-danger'"
               :key="level[0]">
             </li>
@@ -47,7 +46,6 @@
             v-for="level in bids"
             side="bid"
             :level="level"
-            :max="maxSize"
             :color="'has-text-success'"
             :key="level[0]">
           </li>
@@ -83,23 +81,6 @@ export default {
     spread() {
       return (_.last(this.asks)[0] - this.bids[0][0]).toFixed(2);
     },
-    maxSizeAsks() {
-      return _.chain(this.asks)
-                .orderBy([a => parseFloat(a[1])], ['desc'])
-                .take(1)
-                .map(v => v[1])
-                .value()
-    },
-    maxSizeBids() {
-      return _.chain(this.asks)
-                .orderBy([a => parseFloat(a[1])], ['desc'])
-                .take(1)
-                .map(v => v[1])
-                .value()
-    },
-    maxSize() {
-      return this.maxSizeAsks > this.maxSizeBids ? this.maxSizeAsks : this.maxSizeBids
-    }
   },
   methods: {
     beforeEnter: function(el) {

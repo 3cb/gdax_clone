@@ -1,14 +1,6 @@
 <template>
     <div id="column4">
         <nav class="level info is-marginless is-paddingless">
-          <div class="level-item has-text-centered" v-if="winSize.width <= 1600 && winSize.width > 769">
-            <div>
-                <p class="has-text-weight-bold">{{ currentPrice | decimals }} {{ tickerDenom }}</p>
-                <p class="heading">Last trade price</p>
-            </div>
-          </div>
-        </nav>
-        <nav class="level info is-marginless is-paddingless">
             <span class="is-uppercase has-text-weight-semibold">Trade History</span>
         </nav>
         <time-sales :trades="trades" :denom="tickerDenom"></time-sales>
@@ -23,15 +15,6 @@ import { addCommas } from '../lib/numbers.js'
 export default {
   data() {
     return {};
-  },
-  filters: {
-    decimals(price) {
-            if (price < 1 ) {
-                return addCommas((parseFloat(price)).toFixed(5))
-            } else {
-                return addCommas((parseFloat(price)).toFixed(2))
-            }
-        }
   },
   computed: {
     winSize() {
